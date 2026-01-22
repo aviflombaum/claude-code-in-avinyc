@@ -5,7 +5,8 @@
     "email": "avi@avinyc.com"
   },
   "metadata": {
-    "description": "Claude Code plugins for Ruby and Rails development by AviNYC"
+    "description": "Claude Code plugins for Ruby and Rails development by AviNYC",
+    "version": "1.1.0"
   },
   "plugins": [
     {
@@ -13,10 +14,71 @@
       "source": "./plugins/rspec-writer",
       "description": "AI-powered RSpec test generation for Rails applications",
       "version": "1.0.0",
-      "author": {
-        "name": "Avi Flombaum"
-      },
-      "homepage": "https://github.com/avinyc/claude-code-in-avinyc",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+      "license": "MIT"
+    },
+    {
+      "name": "rails-frontend",
+      "source": "./plugins/rails-frontend",
+      "description": "Modern Rails frontend development with Hotwire (Turbo, Stimulus) and Tailwind CSS",
+      "version": "1.0.0",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+      "license": "MIT"
+    },
+    {
+      "name": "design-system",
+      "source": "./plugins/design-system",
+      "description": "UI/UX design expertise with usability principles and visual implementation",
+      "version": "1.0.0",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+      "license": "MIT"
+    },
+    {
+      "name": "saas-metrics",
+      "source": "./plugins/saas-metrics",
+      "description": "SaaS business metrics and marketing analytics for founders",
+      "version": "1.0.0",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+      "license": "MIT"
+    },
+    {
+      "name": "compound-analyzer",
+      "source": "./plugins/compound-analyzer",
+      "description": "Identify automation and systematization opportunities in development work",
+      "version": "1.0.0",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+      "license": "MIT"
+    },
+    {
+      "name": "tech-writer",
+      "source": "./plugins/tech-writer",
+      "description": "Technical writing with Flatiron School's engaging teaching style",
+      "version": "1.0.0",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+      "license": "MIT"
+    },
+    {
+      "name": "rails-expert",
+      "source": "./plugins/rails-expert",
+      "description": "Ruby and Rails best practices following POODR and Refactoring Ruby",
+      "version": "1.0.0",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+      "license": "MIT"
+    },
+    {
+      "name": "plan-interview",
+      "source": "./plugins/plan-interview",
+      "description": "Refine project plans through Socratic questioning",
+      "version": "1.0.0",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
     }
   ]

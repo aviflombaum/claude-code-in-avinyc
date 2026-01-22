@@ -1,0 +1,13 @@
+{
+  "name": "rails-expert",
+  "description": "Ruby and Rails best practices following Practical Object-Oriented Design in Ruby (POODR) and Refactoring Ruby. Expert guidance on code quality and Rails conventions.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Avi Flombaum",
+    "email": "avi@avinyc.com"
+  },
+  "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "license": "MIT",
+  "keywords": ["ruby", "rails", "poodr", "refactoring", "oop", "best-practices", "code-quality"]
+}

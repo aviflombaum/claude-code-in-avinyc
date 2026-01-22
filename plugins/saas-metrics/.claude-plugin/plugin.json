@@ -1,0 +1,13 @@
+{
+  "name": "saas-metrics",
+  "description": "SaaS business metrics and marketing analytics. CAC, LTV, MRR/ARR analysis, conversion funnels, ad spend optimization, and unit economics modeling.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Avi Flombaum",
+    "email": "avi@avinyc.com"
+  },
+  "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "license": "MIT",
+  "keywords": ["saas", "metrics", "analytics", "marketing", "cac", "ltv", "mrr", "arr", "funnel"]
+}

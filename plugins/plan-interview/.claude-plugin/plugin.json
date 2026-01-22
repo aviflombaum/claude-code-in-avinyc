@@ -1,0 +1,13 @@
+{
+  "name": "plan-interview",
+  "description": "Refine project plans through in-depth Socratic questioning. Interview about technical implementation, UI/UX, concerns, and tradeoffs to produce comprehensive specs.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Avi Flombaum",
+    "email": "avi@avinyc.com"
+  },
+  "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "license": "MIT",
+  "keywords": ["planning", "interview", "specification", "requirements", "socratic", "refinement"]
+}

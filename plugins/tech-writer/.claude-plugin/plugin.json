@@ -1,0 +1,13 @@
+{
+  "name": "tech-writer",
+  "description": "Write technical blog posts, tutorials, and documentation with Flatiron School's engaging teaching style. Turn complex topics into clear narratives.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Avi Flombaum",
+    "email": "avi@avinyc.com"
+  },
+  "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "license": "MIT",
+  "keywords": ["writing", "technical", "blog", "tutorial", "documentation", "teaching", "flatiron"]
+}
