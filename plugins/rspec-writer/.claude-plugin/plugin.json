@@ -1,7 +1,7 @@
 {
   "name": "rspec-writer",
   "description": "AI-powered RSpec test generation for Rails applications. Write model specs, request specs, system specs, job specs, mailer specs, and more.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Avi Flombaum",
     "email": "avi@avinyc.com"

@@ -13,9 +13,9 @@ AI-powered RSpec test generation for Rails applications.
 ### Slash Command
 
 ```bash
-/rspec-writer:write-test model User
-/rspec-writer:write-test request Posts
-/rspec-writer:write-test system checkout
+/rspec:write-test model User
+/rspec:write-test request Posts
+/rspec:write-test system checkout
 ```
 
 ### Natural Language

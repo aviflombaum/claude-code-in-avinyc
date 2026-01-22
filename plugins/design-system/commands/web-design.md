@@ -1,5 +1,5 @@
 ---
-name: web-design
+name: avinyc:web-design
 description: Design web interfaces with high visual quality
 argument-hint: "[design brief]"
 ---

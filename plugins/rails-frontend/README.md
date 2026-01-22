@@ -15,20 +15,14 @@ Modern Rails frontend development with Hotwire (Turbo, Stimulus) and Tailwind CS
 Hotwire, Turbo, and Stimulus patterns for Rails.
 
 ```bash
-/rails-frontend:hotwire controller modal
-/rails-frontend:hotwire frame user-profile
-/rails-frontend:hotwire stream notifications
+/hotwire controller modal
+/hotwire frame user-profile
+/hotwire stream notifications
 ```
 
-### tailwind
+### tailwind (auto-triggered)
 
-Tailwind CSS patterns, utilities, and component styling.
-
-```bash
-/rails-frontend:tailwind component card
-/rails-frontend:tailwind layout dashboard
-/rails-frontend:tailwind pattern form
-```
+Tailwind CSS patterns, utilities, and component styling. This skill activates automatically when styling with Tailwind or discussing CSS utilities.
 
 ## Natural Language
 

@@ -11,7 +11,7 @@ Identify automation, systematization, and delegation opportunities in your devel
 ## Usage
 
 ```bash
-/compound-analyzer:analyze
+/compound:analyze
 ```
 
 Run after completing features, fixing bugs, or finishing code reviews to identify compounding opportunities.

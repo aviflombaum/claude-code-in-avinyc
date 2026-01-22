@@ -1,7 +1,7 @@
 {
   "name": "tech-writer",
   "description": "Write technical blog posts, tutorials, and documentation with Flatiron School's engaging teaching style. Turn complex topics into clear narratives.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Avi Flombaum",
     "email": "avi@avinyc.com"

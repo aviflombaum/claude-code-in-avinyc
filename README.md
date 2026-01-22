@@ -29,29 +29,29 @@ A curated collection of Claude Code plugins for Ruby, Rails, and SaaS developmen
 
 | Plugin | "/" Commands | Auto-triggered Skills |
 |--------|--------------|----------------------|
-| **rspec-writer** | `/write-test` | write-test |
-| **rails-frontend** | `/hotwire` | hotwire, tailwind |
-| **rails-expert** | - | rails |
+| [**rspec-writer**](plugins/rspec-writer/README.md) | `/rspec:write-test` | write-test |
+| [**rails-frontend**](plugins/rails-frontend/README.md) | `/hotwire` | hotwire, tailwind |
+| [**rails-expert**](plugins/rails-expert/README.md) | - | rails |
 
 ### Design & UX
 
 | Plugin | "/" Commands | Auto-triggered Skills |
 |--------|--------------|----------------------|
-| **design-system** | `/web-design` | web-designer, ux-ui |
+| [**design-system**](plugins/design-system/README.md) | `/avinyc:web-design` | web-designer, ux-ui |
 
 ### Business & Writing
 
 | Plugin | "/" Commands | Auto-triggered Skills |
 |--------|--------------|----------------------|
-| **saas-metrics** | `/business`, `/marketing` | business, marketing |
-| **tech-writer** | `/write` | write |
+| [**saas-metrics**](plugins/saas-metrics/README.md) | `/saas:business`, `/saas:marketing` | business, marketing |
+| [**tech-writer**](plugins/tech-writer/README.md) | `/avinyc:write` | write |
 
 ### Productivity
 
 | Plugin | "/" Commands | Auto-triggered Skills |
 |--------|--------------|----------------------|
-| **compound-analyzer** | `/analyze` | analyze |
-| **plan-interview** | `/interview` | interview |
+| [**compound-analyzer**](plugins/compound-analyzer/README.md) | `/compound:analyze` | analyze |
+| [**plan-interview**](plugins/plan-interview/README.md) | `/avinyc:interview` | interview |
 
 ---
 
@@ -63,7 +63,7 @@ Generate comprehensive RSpec tests for Rails applications.
 
 ```bash
 # Write tests for a model
-/write-test model User
+/rspec:write-test model User
 
 # Or describe what you need
 "Write request specs for the Posts controller"
@@ -120,13 +120,13 @@ UI/UX design expertise for building beautiful, usable interfaces.
 
 ```bash
 # Design a landing page
-/web-design hero section for a SaaS product
+/avinyc:web-design hero section for a SaaS product
 
 # UX knowledge auto-triggers when discussing usability
 "What's the best information architecture for a settings page?"
 ```
 
-**`/web-design` command:** Visual hierarchy, typography, color theory, layout systems, design aesthetics (Bauhaus, Retro, Futuristic)
+**`/avinyc:web-design` command:** Visual hierarchy, typography, color theory, layout systems, design aesthetics (Bauhaus, Retro, Futuristic)
 
 **`ux-ui` skill (auto-triggered):** Usability principles, accessibility, interaction design, information architecture
 
@@ -138,10 +138,10 @@ SaaS business metrics for founders building products.
 
 ```bash
 # Analyze unit economics
-/business calculate LTV:CAC ratio
+/saas:business calculate LTV:CAC ratio
 
 # Model a marketing funnel
-/marketing ad spend to conversion analysis
+/saas:marketing ad spend to conversion analysis
 ```
 
 **Business skill:** LTV, CAC, MRR/ARR, churn analysis, payback period, Rule of 40
@@ -156,10 +156,10 @@ Write technical content with Flatiron School's engaging teaching style.
 
 ```bash
 # Write a blog post
-/write blog "How to implement Action Cable"
+/avinyc:write blog "How to implement Action Cable"
 
 # Create a tutorial
-/write tutorial "Building a Rails API"
+/avinyc:write tutorial "Building a Rails API"
 ```
 
 **Style:** Technically unimpeachable yet refreshingly human. Strong opinions, loosely held. Clarity through progression.
@@ -172,7 +172,7 @@ Identify automation and systematization opportunities in your development work.
 
 ```bash
 # Analyze completed work
-/analyze
+/compound:analyze
 
 # Or describe what to review
 "Analyze this feature for automation opportunities"
@@ -188,7 +188,7 @@ Refine project plans through in-depth Socratic questioning.
 
 ```bash
 # Interview about a plan
-/interview path/to/plan.md
+/avinyc:interview path/to/plan.md
 ```
 
 **Questions cover:** Technical implementation, UI/UX considerations, edge cases, tradeoffs, assumptions
@@ -206,7 +206,7 @@ This marketplace uses both **commands** and **skills**:
 
 | Type | "/" Autocomplete | Auto-detection | Example |
 |------|-----------------|----------------|---------|
-| Command + Skill | Yes | Yes | `/write-test`, `/analyze` |
+| Command + Skill | Yes | Yes | `/rspec:write-test`, `/compound:analyze` |
 | Skill only | No | Yes | `rails`, `tailwind`, `ux-ui` |
 
 ## Contributing

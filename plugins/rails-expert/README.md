@@ -10,9 +10,12 @@ Ruby and Rails best practices following POODR and Refactoring Ruby.
 
 ## Usage
 
-```bash
-/rails-expert:rails
-```
+This skill activates automatically when discussing Rails code, architecture, or best practices. Just ask naturally:
+
+- "How should I structure this service object?"
+- "Is this controller following best practices?"
+- "Help me refactor this method using POODR principles"
+- "What's the Rails way to handle this?"
 
 ## Core References
 
@@ -45,15 +48,6 @@ Ruby and Rails best practices following POODR and Refactoring Ruby.
 - Use VCR for external HTTP calls
 - Only test features worth testing
 - Never test Rails internals
-
-## Natural Language
-
-Ask for Rails guidance:
-
-- "How should I structure this service object?"
-- "Is this controller following best practices?"
-- "Help me refactor this method using POODR principles"
-- "What's the Rails way to handle this?"
 
 ## License
 

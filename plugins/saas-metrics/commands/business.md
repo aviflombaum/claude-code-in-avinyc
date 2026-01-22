@@ -1,5 +1,5 @@
 ---
-name: business
+name: saas:business
 description: SaaS unit economics and metrics analysis
 argument-hint: "[metric or question]"
 ---

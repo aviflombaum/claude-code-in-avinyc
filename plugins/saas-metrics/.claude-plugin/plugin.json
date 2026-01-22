@@ -1,7 +1,7 @@
 {
   "name": "saas-metrics",
   "description": "SaaS business metrics and marketing analytics. CAC, LTV, MRR/ARR analysis, conversion funnels, ad spend optimization, and unit economics modeling.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Avi Flombaum",
     "email": "avi@avinyc.com"

@@ -11,7 +11,7 @@ Refine project plans through in-depth Socratic questioning.
 ## Usage
 
 ```bash
-/plan-interview:interview path/to/plan.md
+/avinyc:interview path/to/plan.md
 ```
 
 ## What It Does

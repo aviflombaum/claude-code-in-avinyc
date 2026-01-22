@@ -1,5 +1,5 @@
 ---
-name: marketing
+name: saas:marketing
 description: Marketing funnel modeling and conversion metrics
 argument-hint: "[campaign or funnel]"
 ---

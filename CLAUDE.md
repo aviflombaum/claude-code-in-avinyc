@@ -77,14 +77,28 @@ This marketplace uses both commands and skills. Understanding the difference is 
 ### When to Create a Command
 
 Create a command wrapper when the skill represents an **action** the user would explicitly invoke:
-- `/write-test model User` - explicit action
-- `/analyze this workflow` - explicit action
-- `/interview this plan` - explicit action
+- `/rspec:write-test model User` - explicit action
+- `/compound:analyze this workflow` - explicit action
+- `/avinyc:interview this plan` - explicit action
 
 Skip the command when the skill is **contextual knowledge** that should auto-trigger:
 - `rails` - best practices applied automatically when discussing Rails
 - `tailwind` - styling knowledge applied automatically
 - `ux-ui` - usability principles applied automatically
+
+### Command Namespace Conventions
+
+Commands use namespaces to avoid conflicts and clarify purpose:
+
+| Namespace | Use For | Examples |
+|-----------|---------|----------|
+| `avinyc:*` | Personal style, aesthetics, opinions | `avinyc:write`, `avinyc:web-design`, `avinyc:interview` |
+| `compound:*` | Compound engineering methodology | `compound:analyze` |
+| `saas:*` | SaaS domain knowledge | `saas:business`, `saas:marketing` |
+| `rspec:*` | Framework-specific tools | `rspec:write-test` |
+| (no namespace) | When the name IS the thing | `/hotwire` |
+
+**Principle:** Use `avinyc:` for opinionated/personal style. Use domain/framework prefixes for standard tools. Skip namespace only when the command name is already specific enough.
 
 ### Command Wrapper Template
 
@@ -140,14 +154,14 @@ Instructions for the skill...
 
 | Plugin | "/" Commands | Skills (auto-triggered) | Purpose |
 |--------|--------------|------------------------|---------|
-| rspec-writer | `/write-test` | write-test | Generate RSpec tests |
+| rspec-writer | `/rspec:write-test` | write-test | Generate RSpec tests |
 | rails-frontend | `/hotwire` | hotwire, tailwind | Turbo, Stimulus, Tailwind |
 | rails-expert | - | rails | POODR and Refactoring Ruby |
-| design-system | `/web-design` | web-designer, ux-ui | Visual design and usability |
-| saas-metrics | `/business`, `/marketing` | business, marketing | LTV, CAC, funnels |
-| tech-writer | `/write` | write | Blog posts, tutorials |
-| compound-analyzer | `/analyze` | analyze | Automation opportunities |
-| plan-interview | `/interview` | interview | Socratic questioning |
+| design-system | `/avinyc:web-design` | web-designer, ux-ui | Visual design and usability |
+| saas-metrics | `/saas:business`, `/saas:marketing` | business, marketing | LTV, CAC, funnels |
+| tech-writer | `/avinyc:write` | write | Blog posts, tutorials |
+| compound-analyzer | `/compound:analyze` | analyze | Automation opportunities |
+| plan-interview | `/avinyc:interview` | interview | Socratic questioning |
 
 ## Adding New Plugins
 
@@ -186,3 +200,14 @@ Instructions for the skill...
 2. Bump `version` in affected `plugins/*/.claude-plugin/plugin.json` files
 3. Bump matching versions in `.claude-plugin/marketplace.json` plugins array
 4. Commit and push
+
+## Plugin Change Checklist
+
+When modifying plugins, ensure all related files are updated:
+
+- [ ] Update command/skill content (commands/*.md, skills/*/SKILL.md)
+- [ ] Update plugin README.md with new examples
+- [ ] Update main README.md tables and examples
+- [ ] Update CLAUDE.md if conventions changed
+- [ ] Bump version in `plugins/<name>/.claude-plugin/plugin.json`
+- [ ] Bump matching version in `.claude-plugin/marketplace.json`

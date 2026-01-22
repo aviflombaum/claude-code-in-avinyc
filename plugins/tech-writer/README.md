@@ -11,9 +11,9 @@ Write technical blog posts, tutorials, and documentation with Flatiron School's 
 ## Usage
 
 ```bash
-/tech-writer:write blog dependency-injection-in-ruby
-/tech-writer:write tutorial building-a-rails-api
-/tech-writer:write docs authentication-system
+/avinyc:write blog dependency-injection-in-ruby
+/avinyc:write tutorial building-a-rails-api
+/avinyc:write docs authentication-system
 ```
 
 ## Writing Style

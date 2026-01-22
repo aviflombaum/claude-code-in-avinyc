@@ -15,7 +15,7 @@ SaaS business metrics and marketing analytics for founders and product teams.
 SaaS unit economics and growth strategy.
 
 ```bash
-/saas-metrics:business
+/saas:business
 ```
 
 Covers:
@@ -31,7 +31,7 @@ Covers:
 Marketing funnel modeling and conversion metrics.
 
 ```bash
-/saas-metrics:marketing
+/saas:marketing
 ```
 
 Covers:

@@ -10,13 +10,9 @@ UI/UX design expertise combining usability principles with visual implementation
 
 ## Skills
 
-### ux-ui
+### ux-ui (auto-triggered)
 
-UX/UI design principles for clean, intuitive interfaces.
-
-```bash
-/design-system:ux-ui
-```
+UX/UI design principles for clean, intuitive interfaces. This skill activates automatically when discussing usability, accessibility, or information architecture.
 
 Covers:
 - Information architecture
@@ -30,9 +26,9 @@ Covers:
 Web graphic design for interfaces, layouts, and visual systems.
 
 ```bash
-/design-system:web-designer landing page
-/design-system:web-designer dashboard
-/design-system:web-designer bauhaus style
+/avinyc:web-design landing page
+/avinyc:web-design dashboard
+/avinyc:web-design bauhaus style
 ```
 
 Covers:

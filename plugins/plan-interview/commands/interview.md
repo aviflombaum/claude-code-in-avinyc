@@ -1,5 +1,5 @@
 ---
-name: interview
+name: avinyc:interview
 description: Interview about a plan to refine it
 argument-hint: "[plan file path]"
 ---

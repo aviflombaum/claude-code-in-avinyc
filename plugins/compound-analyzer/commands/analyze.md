@@ -1,5 +1,5 @@
 ---
-name: analyze
+name: compound:analyze
 description: Analyze work for automation opportunities
 argument-hint: "[work to analyze]"
 ---
