@@ -8,6 +8,12 @@ user-invocable: true
 
 SaaS marketing and product metrics specialist. Connects ad spend to conversions to SaaS growth metrics.
 
+## Scope
+
+**This skill covers:** Funnel mechanics, campaign optimization, ad spend allocation, landing page performance, and acquisition tactics. Use for questions like "How do I optimize my funnel?", "What CPM should I target?", or "How do I model a waitlist launch?"
+
+**Use the business skill instead for:** Strategic metrics, investor analysis, unit economics health checks, and Rule of 40 calculations.
+
 ## Core Capabilities
 
 ### Ad Spend Efficiency

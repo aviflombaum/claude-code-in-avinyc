@@ -21,7 +21,7 @@ Covers:
 - Responsive design
 - Performance and efficiency
 
-### web-designer
+### web-design
 
 Web graphic design for interfaces, layouts, and visual systems.
 
@@ -54,9 +54,9 @@ Just describe your design needs:
 | Usability review | ux-ui |
 | Information architecture | ux-ui |
 | Accessibility audit | ux-ui |
-| Visual design direction | web-designer |
-| Landing page design | web-designer |
-| Style/aesthetic guidance | web-designer |
+| Visual design direction | web-design |
+| Landing page design | web-design |
+| Style/aesthetic guidance | web-design |
 
 ## License
 

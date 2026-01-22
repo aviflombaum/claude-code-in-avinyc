@@ -51,14 +51,6 @@ Design mobile-first:
 - Make the happy path obvious
 - Make error recovery simple
 
-## Visual Hierarchy Checklist
-
-- [ ] One primary focal point per screen/section
-- [ ] Clear typography hierarchy (H1 > H2 > Body > Labels)
-- [ ] Size, weight, color, and spacing guide the eye
-- [ ] Related elements grouped, unrelated separated
-- [ ] No decorative noise that doesn't serve meaning
-
 ## Goal
 
 Every interface should feel fast, focused, and frictionless.

@@ -32,7 +32,7 @@
       "name": "design-system",
       "source": "./plugins/design-system",
       "description": "UI/UX design expertise with usability principles and visual implementation",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -41,7 +41,7 @@
       "name": "saas-metrics",
       "source": "./plugins/saas-metrics",
       "description": "SaaS business metrics and marketing analytics for founders",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"

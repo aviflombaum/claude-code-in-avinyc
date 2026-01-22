@@ -44,7 +44,7 @@ plugins/
   design-system/
     .claude-plugin/plugin.json
     commands/web-design.md        # "/" command wrapper
-    skills/web-designer/SKILL.md
+    skills/web-design/SKILL.md
     skills/ux-ui/SKILL.md         # Skill-only (no command)
 
   saas-metrics/
@@ -169,7 +169,7 @@ Instructions for the skill...
 | rspec-writer | `/rspec:write-test` | write-test | Generate RSpec tests |
 | rails-frontend | `/hotwire` | hotwire, tailwind | Turbo, Stimulus, Tailwind |
 | rails-expert | - | rails | POODR and Refactoring Ruby |
-| design-system | `/avinyc:web-design` | web-designer, ux-ui | Visual design and usability |
+| design-system | `/avinyc:web-design` | web-design, ux-ui | Visual design and usability |
 | saas-metrics | `/saas:business`, `/saas:marketing` | business, marketing | LTV, CAC, funnels |
 | tech-writer | `/avinyc:write` | write | Blog posts, tutorials |
 | compound-analyzer | `/compound:analyze` | analyze | Automation opportunities |

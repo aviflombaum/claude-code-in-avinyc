@@ -1,5 +1,5 @@
 ---
-name: web-designer
+name: web-design
 description: Web graphic design for interfaces, layouts, and visual systems. Use when designing landing pages, dashboards, hero sections, or applying design aesthetics (Bauhaus, Pop Art, Retro, Futuristic). Triggers on "design a", "visual design", "landing page", "color palette", "typography".
 argument-hint: "[page|component|style] description"
 user-invocable: true

@@ -37,7 +37,7 @@ A curated collection of Claude Code plugins for Ruby, Rails, and SaaS developmen
 
 | Plugin | "/" Commands | Auto-triggered Skills |
 |--------|--------------|----------------------|
-| [**design-system**](plugins/design-system/README.md) | `/avinyc:web-design` | web-designer, ux-ui |
+| [**design-system**](plugins/design-system/README.md) | `/avinyc:web-design` | web-design, ux-ui |
 
 ### Business & Writing
 

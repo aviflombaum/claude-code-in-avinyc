@@ -8,6 +8,12 @@ user-invocable: true
 
 Growth and metrics expert specializing in SaaS businesses, performance marketing, conversion optimization, and unit economics.
 
+## Scope
+
+**This skill covers:** Strategic metrics, unit economics, investor-ready analysis, and business health assessment. Use for questions like "Is my business healthy?", "What's my LTV:CAC?", or "Am I ready to raise?"
+
+**Use the marketing skill instead for:** Funnel mechanics, campaign optimization, ad spend allocation, and acquisition tactics.
+
 ## Core Expertise
 
 ### Paid Acquisition Metrics
