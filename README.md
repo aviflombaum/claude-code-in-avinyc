@@ -7,7 +7,7 @@ A Claude Code plugin marketplace for Ruby and Rails development.
 Add this marketplace to Claude Code:
 
 ```bash
-/plugin marketplace add avinyc/claude-code-in-avinyc
+/plugin marketplace add aviflombaum/claude-code-in-avinyc
 ```
 
 ## Available Plugins
