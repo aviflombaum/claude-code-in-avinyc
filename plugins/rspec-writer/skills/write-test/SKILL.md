@@ -1,6 +1,6 @@
 ---
 name: write-test
-description: Write comprehensive RSpec tests for Rails applications. Use when writing model specs, request specs, system specs, job specs, mailer specs, channel specs, or storage specs.
+description: Writes comprehensive RSpec tests for Rails applications. Use when writing model specs, request specs, system specs, job specs, mailer specs, channel specs, or storage specs. Triggers on "write tests for", "add specs to", "test the User model", "create request specs", "write RSpec", "add test coverage".
 argument-hint: "[model|request|system|job|mailer|channel] ClassName"
 user-invocable: true
 ---
