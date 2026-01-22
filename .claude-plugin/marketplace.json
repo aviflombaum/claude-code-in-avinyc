@@ -1,0 +1,23 @@
+{
+  "name": "claude-code-in-avinyc",
+  "owner": {
+    "name": "Avi Flombaum",
+    "email": "avi@avinyc.com"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for Ruby and Rails development by AviNYC"
+  },
+  "plugins": [
+    {
+      "name": "rspec-writer",
+      "source": "./plugins/rspec-writer",
+      "description": "AI-powered RSpec test generation for Rails applications",
+      "version": "1.0.0",
+      "author": {
+        "name": "Avi Flombaum"
+      },
+      "homepage": "https://github.com/avinyc/claude-code-in-avinyc",
+      "license": "MIT"
+    }
+  ]
+}

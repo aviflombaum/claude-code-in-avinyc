@@ -1,0 +1,13 @@
+{
+  "name": "rspec-writer",
+  "description": "AI-powered RSpec test generation for Rails applications. Write model specs, request specs, system specs, job specs, mailer specs, and more.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Avi Flombaum",
+    "email": "avi@avinyc.com"
+  },
+  "homepage": "https://github.com/avinyc/claude-code-in-avinyc",
+  "repository": "https://github.com/avinyc/claude-code-in-avinyc",
+  "license": "MIT",
+  "keywords": ["rspec", "testing", "ruby", "rails", "tdd"]
+}
