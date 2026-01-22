@@ -5,7 +5,8 @@
     "email": "avi@avinyc.com"
   },
   "metadata": {
-    "description": "Claude Code plugins for Ruby and Rails development by AviNYC"
+    "description": "Claude Code plugins for Ruby and Rails development by AviNYC",
+    "version": "1.1.0"
   },
   "plugins": [
     {
