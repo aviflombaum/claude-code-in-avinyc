@@ -1,0 +1,13 @@
+{
+  "name": "design-system",
+  "description": "UI/UX design expertise combining usability principles with visual implementation. Design thinking, information architecture, and aesthetic execution.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Avi Flombaum",
+    "email": "avi@avinyc.com"
+  },
+  "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "license": "MIT",
+  "keywords": ["design", "ux", "ui", "visual", "usability", "accessibility", "frontend"]
+}

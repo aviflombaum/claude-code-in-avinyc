@@ -1,0 +1,13 @@
+{
+  "name": "rails-frontend",
+  "description": "Modern Rails frontend development with Hotwire (Turbo, Stimulus) and Tailwind CSS. Build interactive, responsive Rails applications.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Avi Flombaum",
+    "email": "avi@avinyc.com"
+  },
+  "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "license": "MIT",
+  "keywords": ["rails", "hotwire", "turbo", "stimulus", "tailwind", "frontend", "ruby"]
+}
