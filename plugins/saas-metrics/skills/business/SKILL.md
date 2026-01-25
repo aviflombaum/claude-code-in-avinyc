@@ -1,6 +1,7 @@
 ---
 name: business
 description: SaaS unit economics and growth strategy. Use for LTV, CAC, MRR/ARR analysis, payback period, churn analysis, Rule of 40, and SaaS financial modeling. Triggers on "unit economics", "ltv", "cac", "mrr", "arr", "churn", "saas metrics".
+argument-hint: "[metric or question]"
 user-invocable: true
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: marketing
 description: Marketing funnel modeling and conversion metrics. Use for ad spend analysis, CPM/CPC optimization, landing page conversions, waitlist economics, and funnel modeling. Triggers on "ad spend", "cpm", "cpc", "conversion rate", "landing page", "waitlist", "funnel".
+argument-hint: "[campaign or funnel]"
 user-invocable: true
 ---
 

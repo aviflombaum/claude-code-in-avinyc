@@ -1,18 +1,26 @@
-# Claude Code Plugins
+# Agent Skills for Ruby & Rails
 
-A curated collection of Claude Code plugins for Ruby, Rails, and SaaS development.
+A curated collection of AI agent skills for Ruby, Rails, and SaaS development.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Plugins](https://img.shields.io/badge/plugins-8-green.svg)](#available-plugins)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-blueviolet.svg)](https://claude.ai/code)
+[![Skills](https://img.shields.io/badge/skills-11-green.svg)](#available-plugins)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blueviolet.svg)](https://agentskills.io)
 
 ## Quick Start
 
+### Any Agent (Cursor, OpenAI Codex, Gemini CLI, etc.)
+
 ```bash
-# Add this marketplace to Claude Code
+npx add-skill aviflombaum/claude-code-in-avinyc
+```
+
+### Claude Code
+
+```bash
+# Add marketplace and install all plugins
 /plugin marketplace add aviflombaum/claude-code-in-avinyc
 
-# Install all plugins
+# Or install individual plugins
 /plugin install rspec-writer@claude-code-in-avinyc
 /plugin install rails-frontend@claude-code-in-avinyc
 /plugin install rails-expert@claude-code-in-avinyc

@@ -1,7 +1,9 @@
 ---
 name: analyze
 description: Analyze completed development work to identify automation and systematization opportunities. Use after finishing features, fixing bugs, or completing code reviews. Triggers on "analyze for automation", "what can we automate", "compound opportunities", "systematize".
+argument-hint: "[work to analyze]"
 user-invocable: true
+agent: Explore
 ---
 
 # Compound Engineering Analyzer

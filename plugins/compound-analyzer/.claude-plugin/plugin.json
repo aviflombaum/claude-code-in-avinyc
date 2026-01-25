@@ -1,7 +1,7 @@
 {
   "name": "compound-analyzer",
   "description": "Analyze completed development work to identify automation, systematization, and delegation opportunities. Build compounding engineering systems.",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "author": {
     "name": "Avi Flombaum",
     "email": "im@avi.nyc"
