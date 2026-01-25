@@ -1,7 +1,7 @@
 {
   "name": "rails-frontend",
   "description": "Modern Rails frontend development with Hotwire (Turbo, Stimulus) and Tailwind CSS. Build interactive, responsive Rails applications.",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "author": {
     "name": "Avi Flombaum",
     "email": "im@avi.nyc"

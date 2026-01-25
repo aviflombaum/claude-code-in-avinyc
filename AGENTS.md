@@ -63,7 +63,7 @@ skills/                      # Flat skill directory for npx add-skill
   settings.local.json        # Local settings
 
 .claude-plugin/
-  marketplace.json           # Marketplace manifest (v1.3.0)
+  marketplace.json           # Marketplace manifest (v1.3.2)
 
 .github/
   workflows/

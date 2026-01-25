@@ -217,13 +217,29 @@ This marketplace uses both **commands** and **skills**:
 | Command + Skill | Yes | Yes | `/rspec:write-test`, `/compound:analyze` |
 | Skill only | No | Yes | `rails`, `tailwind`, `ux-ui` |
 
+## Local Development
+
+Test plugin changes locally before pushing:
+
+```bash
+# One-time setup
+./scripts/setup-local-dev.sh
+
+# Verify configuration
+./scripts/validate-settings.sh
+./scripts/validate-versions.sh
+```
+
+This configures Claude Code to load plugins from your local directory instead of GitHub. See [AGENTS.md](AGENTS.md#local-development) for details.
+
 ## Contributing
 
 1. Fork the repository
-2. Create your plugin in `plugins/<plugin-name>/`
-3. Add `.claude-plugin/plugin.json` manifest
-4. Add skills under `skills/<skill-name>/SKILL.md`
-5. For action-oriented skills, add a command wrapper in `commands/<command-name>.md`:
+2. Run `./scripts/setup-local-dev.sh` to configure local testing
+3. Create your plugin in `plugins/<plugin-name>/`
+4. Add `.claude-plugin/plugin.json` manifest
+5. Add skills under `skills/<skill-name>/SKILL.md`
+6. For action-oriented skills, add a command wrapper in `commands/<command-name>.md`:
    ```markdown
    ---
    name: command-name
@@ -233,9 +249,9 @@ This marketplace uses both **commands** and **skills**:
 
    Invoke the plugin-name:skill-name skill for: $ARGUMENTS
    ```
-6. Register in `.claude-plugin/marketplace.json`
-7. **Bump version** with `./scripts/bump-version.sh <plugin-name> patch` (required for updates to propagate)
-8. Submit a pull request
+7. Register in `.claude-plugin/marketplace.json`
+8. **Bump version** with `./scripts/bump-version.sh <plugin-name> patch` (required for updates to propagate)
+9. Submit a pull request
 
 ## License
 
