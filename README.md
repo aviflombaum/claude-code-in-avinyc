@@ -3,8 +3,12 @@
 A curated collection of AI agent skills for Ruby, Rails, and SaaS development.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Skills](https://img.shields.io/badge/skills-12-green.svg)](#available-plugins)
+[![Plugins](https://img.shields.io/badge/plugins-10-brightgreen.svg)](#available-plugins)
+[![Skills](https://img.shields.io/badge/skills-14-green.svg)](#available-plugins)
+[![Commands](https://img.shields.io/badge/commands-10-orange.svg)](#available-plugins)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blueviolet.svg)](https://agentskills.io)
+
+---
 
 ## Quick Start
 
@@ -30,38 +34,47 @@ npx add-skill aviflombaum/claude-code-in-avinyc
 /plugin install compound-analyzer@claude-code-in-avinyc
 /plugin install plan-interview@claude-code-in-avinyc
 /plugin install warp-rails@claude-code-in-avinyc
+/plugin install monitor-config@claude-code-in-avinyc
 ```
+
+---
 
 ## Available Plugins
 
-### Rails Development
+### 🛤️ Rails Development
 
-| Plugin | "/" Commands | Auto-triggered Skills |
-|--------|--------------|----------------------|
-| [**rspec-writer**](plugins/rspec-writer/README.md) | `/rspec:write-test` | write-test |
-| [**rails-frontend**](plugins/rails-frontend/README.md) | `/hotwire` | hotwire, tailwind |
-| [**rails-expert**](plugins/rails-expert/README.md) | - | rails |
-| [**warp-rails**](plugins/warp-rails/README.md) | `/warp-rails` | bootstrap |
+| Plugin | "/" Commands | Auto-triggered Skills | Description |
+|--------|--------------|----------------------|-------------|
+| [**rspec-writer**](plugins/rspec-writer/README.md) | `/rspec:write-test` | write-test | Generate comprehensive RSpec tests |
+| [**rails-frontend**](plugins/rails-frontend/README.md) | `/hotwire` | hotwire, tailwind | Turbo, Stimulus, and Tailwind |
+| [**rails-expert**](plugins/rails-expert/README.md) | — | rails | POODR and Refactoring Ruby |
 
-### Design & UX
+### 🎨 Design & UX
 
-| Plugin | "/" Commands | Auto-triggered Skills |
-|--------|--------------|----------------------|
-| [**design-system**](plugins/design-system/README.md) | `/avinyc:web-design` | web-design, ux-ui |
+| Plugin | "/" Commands | Auto-triggered Skills | Description |
+|--------|--------------|----------------------|-------------|
+| [**design-system**](plugins/design-system/README.md) | `/avinyc:web-design` | web-design, ux-ui | Visual design and usability |
 
-### Business & Writing
+### 📊 Business & Writing
 
-| Plugin | "/" Commands | Auto-triggered Skills |
-|--------|--------------|----------------------|
-| [**saas-metrics**](plugins/saas-metrics/README.md) | `/saas:business`, `/saas:marketing` | business, marketing |
-| [**tech-writer**](plugins/tech-writer/README.md) | `/avinyc:write` | write |
+| Plugin | "/" Commands | Auto-triggered Skills | Description |
+|--------|--------------|----------------------|-------------|
+| [**saas-metrics**](plugins/saas-metrics/README.md) | `/saas:business`, `/saas:marketing` | business, marketing | LTV, CAC, funnels |
+| [**tech-writer**](plugins/tech-writer/README.md) | `/avinyc:write` | write | Blog posts and tutorials |
 
-### Productivity
+### ⚡ Productivity
 
-| Plugin | "/" Commands | Auto-triggered Skills |
-|--------|--------------|----------------------|
-| [**compound-analyzer**](plugins/compound-analyzer/README.md) | `/compound:analyze` | analyze |
-| [**plan-interview**](plugins/plan-interview/README.md) | `/avinyc:interview` | interview |
+| Plugin | "/" Commands | Auto-triggered Skills | Description |
+|--------|--------------|----------------------|-------------|
+| [**compound-analyzer**](plugins/compound-analyzer/README.md) | `/compound:analyze` | analyze | Find automation opportunities |
+| [**plan-interview**](plugins/plan-interview/README.md) | `/avinyc:interview` | interview | Socratic plan refinement |
+
+### 🖥️ Developer Tools
+
+| Plugin | "/" Commands | Auto-triggered Skills | Description |
+|--------|--------------|----------------------|-------------|
+| [**warp-rails**](plugins/warp-rails/README.md) | `/warp-rails` | bootstrap | Bootstrap Warp terminal for Rails |
+| [**monitor-config**](plugins/monitor-config/README.md) | `/avinyc:monitor-config` | monitor-config | Optimize multi-monitor setups |
 
 ---
 
@@ -215,14 +228,37 @@ Bootstrap Warp terminal configuration for Rails projects with colored tabs.
 ```
 
 **Creates launch config with tabs:**
-- Server (green) - `bin/dev` or `rails server`
-- Claude (blue) - Claude Code session
-- Shell (yellow) - Empty terminal
-- Console (magenta) - Rails console
-- Logs (cyan) - Tail development log
-- Jobs (red) - Background processor (if detected)
+- Server (green) — `bin/dev` or `rails server`
+- Claude (blue) — Claude Code session
+- Shell (yellow) — Empty terminal
+- Console (magenta) — Rails console
+- Logs (cyan) — Tail development log
+- Jobs (red) — Background processor (if detected)
 
 **Auto-detects:** `bin/dev`, Sidekiq, GoodJob, SolidQueue
+
+---
+
+### monitor-config
+
+Configure and optimize multi-monitor setups on macOS using displayplacer.
+
+```bash
+# Configure your monitors
+/avinyc:monitor-config
+
+# Or describe your setup
+"Optimize my monitors for coding with a vertical display on the left"
+```
+
+**Interactive workflow:**
+1. Discovers connected displays
+2. Interviews about physical arrangement
+3. Asks about use case (coding, media, gaming)
+4. Recommends optimal resolutions and refresh rates
+5. Applies configuration and saves reusable profiles
+
+**Supports:** 4K displays, portrait/landscape orientation, 120Hz refresh rates, multi-monitor arrangements
 
 ---
 
@@ -230,15 +266,18 @@ Bootstrap Warp terminal configuration for Rails projects with colored tabs.
 
 This marketplace uses both **commands** and **skills**:
 
-- **Commands** (`/command-name`): Appear in "/" autocomplete. Use for explicit actions.
-- **Skills** (auto-triggered): Loaded based on conversation context. Use for contextual knowledge.
+| Type | "/" Autocomplete | Auto-detection | When to Use |
+|------|-----------------|----------------|-------------|
+| **Command + Skill** | ✓ | ✓ | Action-oriented features |
+| **Skill only** | — | ✓ | Contextual knowledge |
+
+**Commands** (`/command-name`): Appear in "/" autocomplete. Use for explicit actions like `/rspec:write-test` or `/compound:analyze`.
+
+**Skills** (auto-triggered): Loaded based on conversation context. Use for contextual knowledge like `rails`, `tailwind`, or `ux-ui`.
 
 **Pattern:** Action-oriented features get both. Contextual knowledge gets skills only.
 
-| Type | "/" Autocomplete | Auto-detection | Example |
-|------|-----------------|----------------|---------|
-| Command + Skill | Yes | Yes | `/rspec:write-test`, `/compound:analyze` |
-| Skill only | No | Yes | `rails`, `tailwind`, `ux-ui` |
+---
 
 ## Local Development
 
@@ -254,6 +293,8 @@ Test plugin changes locally before pushing:
 ```
 
 This configures Claude Code to load plugins from your local directory instead of GitHub. See [AGENTS.md](AGENTS.md#local-development) for details.
+
+---
 
 ## Contributing
 
@@ -275,6 +316,8 @@ This configures Claude Code to load plugins from your local directory instead of
 7. Register in `.claude-plugin/marketplace.json`
 8. **Bump version** with `./scripts/bump-version.sh <plugin-name> patch` (required for updates to propagate)
 9. Submit a pull request
+
+---
 
 ## License
 
