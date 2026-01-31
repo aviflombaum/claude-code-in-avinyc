@@ -99,6 +99,15 @@
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
+    },
+    {
+      "name": "git-workflows",
+      "source": "./plugins/git-workflows",
+      "description": "Git workflow automation for Rails projects with intelligent commit grouping and worktree management",
+      "version": "1.4.0",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+      "license": "MIT"
     }
   ]
 }
