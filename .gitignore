@@ -2,3 +2,7 @@ plans/
 .ai/
 .claude/*.local.json
 plugins/test-plugin/
+.DS_Store
+node_modules/
+.claudelint-cache/
+bun.lock

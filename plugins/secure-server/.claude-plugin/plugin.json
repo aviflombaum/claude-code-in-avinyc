@@ -1,0 +1,13 @@
+{
+  "name": "secure-server",
+  "description": "Ubuntu server hardening: fail2ban, UFW, auditd, rkhunter, unattended-upgrades, and custom alerting",
+  "version": "0.1.0",
+  "author": {
+    "name": "Avi Flombaum",
+    "email": "im@avi.nyc"
+  },
+  "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "license": "MIT",
+  "keywords": ["security", "server-hardening", "ubuntu", "fail2ban", "ufw", "auditd"]
+}

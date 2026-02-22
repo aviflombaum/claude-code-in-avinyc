@@ -1,0 +1,37 @@
+{
+  "description": "QMD plugin hooks: guard Glob/Grep/Task to enforce qmd-search-first workflow on indexed directories",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/guard-qmd-search.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/guard-qmd-search.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/guard-qmd-search.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

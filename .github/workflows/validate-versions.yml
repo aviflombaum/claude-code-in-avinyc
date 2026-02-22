@@ -196,8 +196,15 @@ jobs:
           # Get actual plugin directories
           actual_plugins=$(ls -d plugins/*/ 2>/dev/null | xargs -I{} basename {} | sort)
 
+          # Plugins that are in-development and intentionally not in marketplace
+          EXCLUDED="secure-server test-plugin"
+
           # Check each actual plugin is in marketplace
           for plugin in $actual_plugins; do
+            if echo "$EXCLUDED" | grep -qw "$plugin"; then
+              echo "⏭️  $plugin excluded (in-development)"
+              continue
+            fi
             if echo "$marketplace_plugins" | grep -q "^${plugin}$"; then
               echo "✅ $plugin registered in marketplace.json"
             else
@@ -221,6 +228,15 @@ jobs:
           fi
           echo ""
           echo "✅ Marketplace registry matches plugins/"
+
+      - name: Check for .DS_Store
+        run: |
+          if find . -name ".DS_Store" | grep -q .; then
+            echo "ERROR: .DS_Store files found"
+            find . -name ".DS_Store"
+            exit 1
+          fi
+          echo "No .DS_Store files found"
 
       - name: Comment on PR if validation fails
         if: failure() && github.event_name == 'pull_request'

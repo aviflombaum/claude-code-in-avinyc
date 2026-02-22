@@ -1,7 +1,7 @@
 {
   "name": "warp-rails",
   "description": "Bootstrap Warp terminal configuration for Rails projects with colored tabs and workflows",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": {
     "name": "Avi Flombaum",
     "email": "im@avi.nyc"

@@ -6,15 +6,14 @@
   },
   "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
   "metadata": {
-    "description": "Claude Code plugins for Ruby and Rails development by AviNYC",
-    "version": "1.5.1"
+    "description": "Claude Code plugins for Ruby and Rails development by AviNYC"
   },
   "plugins": [
     {
       "name": "rspec-writer",
       "source": "./plugins/rspec-writer",
-      "description": "AI-powered RSpec test generation for Rails applications",
       "version": "1.4.2",
+      "description": "AI-powered RSpec test generation for Rails applications",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -22,8 +21,8 @@
     {
       "name": "rails-frontend",
       "source": "./plugins/rails-frontend",
-      "description": "Modern Rails frontend development with Hotwire (Turbo, Stimulus) and Tailwind CSS",
       "version": "1.3.2",
+      "description": "Modern Rails frontend development with Hotwire (Turbo, Stimulus) and Tailwind CSS",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -31,8 +30,8 @@
     {
       "name": "design-system",
       "source": "./plugins/design-system",
-      "description": "UI/UX design expertise with usability principles and visual implementation",
       "version": "1.3.2",
+      "description": "UI/UX design expertise with usability principles and visual implementation",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -40,8 +39,8 @@
     {
       "name": "saas-metrics",
       "source": "./plugins/saas-metrics",
-      "description": "SaaS business metrics and marketing analytics for founders",
       "version": "1.3.2",
+      "description": "SaaS business metrics and marketing analytics for founders",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -49,8 +48,8 @@
     {
       "name": "compound-analyzer",
       "source": "./plugins/compound-analyzer",
-      "description": "Identify automation and systematization opportunities in development work",
       "version": "1.3.2",
+      "description": "Identify automation and systematization opportunities in development work",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -58,8 +57,8 @@
     {
       "name": "tech-writer",
       "source": "./plugins/tech-writer",
-      "description": "Technical writing with Flatiron School's engaging teaching style",
       "version": "1.3.2",
+      "description": "Technical writing with Flatiron School's engaging teaching style",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -67,8 +66,8 @@
     {
       "name": "rails-expert",
       "source": "./plugins/rails-expert",
+      "version": "1.3.3",
       "description": "Ruby and Rails best practices following POODR and Refactoring Ruby",
-      "version": "1.3.2",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -76,8 +75,8 @@
     {
       "name": "plan-interview",
       "source": "./plugins/plan-interview",
-      "description": "Refine project plans through Socratic questioning",
       "version": "1.3.2",
+      "description": "Refine project plans through Socratic questioning",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -85,8 +84,8 @@
     {
       "name": "warp-rails",
       "source": "./plugins/warp-rails",
+      "version": "1.0.4",
       "description": "Bootstrap Warp terminal configuration for Rails projects",
-      "version": "1.0.3",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -94,8 +93,8 @@
     {
       "name": "monitor-config",
       "source": "./plugins/monitor-config",
-      "description": "Configure and optimize multi-monitor setups on macOS using displayplacer",
       "version": "1.0.1",
+      "description": "Configure and optimize multi-monitor setups on macOS using displayplacer",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"
@@ -103,8 +102,17 @@
     {
       "name": "git-workflows",
       "source": "./plugins/git-workflows",
-      "description": "Git workflow automation for Rails projects with intelligent commit grouping and worktree management",
       "version": "1.4.0",
+      "description": "Git workflow automation for Rails projects with intelligent commit grouping and worktree management",
+      "author": { "name": "Avi Flombaum" },
+      "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+      "license": "MIT"
+    },
+    {
+      "name": "qmd",
+      "source": "./plugins/qmd",
+      "version": "1.0.0",
+      "description": "Generic qmd semantic search: per-project setup interview, smart search across collections, guard hooks for qmd-first workflow",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
       "license": "MIT"

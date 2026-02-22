@@ -1,0 +1,24 @@
+# Server Security Alert Configuration
+# Copy this to /opt/server-security/config/alert.conf on each server
+
+# Cloudflare Worker endpoint (no trailing slash)
+ALERT_ENDPOINT="https://your-alerts-worker.workers.dev"
+
+# Shared secret for authentication (generate with: openssl rand -hex 32)
+ALERT_SECRET="your-secret-here"
+
+# Server identification (unique per server)
+SERVER_NAME="server-hostname"
+
+# Optional: Server role (used in alerts for context)
+SERVER_ROLE="web"  # web, database, worker, utility
+
+# Health check thresholds (optional, defaults shown)
+DISK_THRESHOLD=85           # Alert when disk usage exceeds this %
+MEMORY_THRESHOLD=90         # Alert when memory usage exceeds this %
+LOAD_THRESHOLD_MULTIPLIER=2.0  # Alert when load > cores * this value
+
+# Miner detection thresholds (optional, defaults shown)
+CPU_THRESHOLD=80            # % of cores for sustained spike detection
+PROCESS_CPU_THRESHOLD=50    # Single process CPU% to flag as suspicious
+SPIKE_COUNT_THRESHOLD=3     # Consecutive 5-min checks before alerting (15 min sustained)

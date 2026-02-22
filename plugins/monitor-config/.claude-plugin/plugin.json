@@ -2,6 +2,12 @@
   "name": "monitor-config",
   "description": "Configure and optimize multi-monitor setups on macOS using displayplacer",
   "version": "1.0.1",
-  "author": { "name": "Avi Flombaum" },
+  "author": {
+    "name": "Avi Flombaum",
+    "email": "im@avi.nyc"
+  },
+  "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
+  "license": "MIT",
   "keywords": ["macos", "monitor", "display", "displayplacer", "multi-monitor"]
 }

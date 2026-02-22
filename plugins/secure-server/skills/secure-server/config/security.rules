@@ -1,0 +1,83 @@
+# /etc/audit/rules.d/security.rules
+# auditd rules for monitoring critical system files
+
+# Delete all existing rules (start fresh)
+-D
+
+# Set buffer size (adjust based on system activity)
+-b 8192
+
+# Set failure mode (1 = printk, 2 = panic)
+-f 1
+
+# ============================================================================
+# User/Group modifications
+# ============================================================================
+-w /etc/passwd -p wa -k user_modification
+-w /etc/shadow -p wa -k user_modification
+-w /etc/group -p wa -k group_modification
+-w /etc/gshadow -p wa -k group_modification
+
+# ============================================================================
+# Sudo/Privilege escalation
+# ============================================================================
+-w /etc/sudoers -p wa -k sudoers_modification
+-w /etc/sudoers.d/ -p wa -k sudoers_modification
+
+# ============================================================================
+# SSH configuration
+# ============================================================================
+-w /etc/ssh/sshd_config -p wa -k sshd_config
+-w /etc/ssh/sshd_config.d/ -p wa -k sshd_config
+-w /root/.ssh/ -p wa -k root_ssh
+
+# ============================================================================
+# Cron/Scheduled tasks
+# ============================================================================
+-w /etc/crontab -p wa -k cron_modification
+-w /etc/cron.d/ -p wa -k cron_modification
+-w /etc/cron.daily/ -p wa -k cron_modification
+-w /etc/cron.hourly/ -p wa -k cron_modification
+-w /etc/cron.weekly/ -p wa -k cron_modification
+-w /etc/cron.monthly/ -p wa -k cron_modification
+-w /var/spool/cron/ -p wa -k cron_modification
+
+# ============================================================================
+# System startup/init
+# ============================================================================
+-w /etc/systemd/ -p wa -k systemd_modification
+-w /etc/init.d/ -p wa -k init_modification
+-w /etc/rc.local -p wa -k rc_local
+
+# ============================================================================
+# Network configuration
+# ============================================================================
+-w /etc/hosts -p wa -k hosts_modification
+-w /etc/hosts.allow -p wa -k hosts_modification
+-w /etc/hosts.deny -p wa -k hosts_modification
+-w /etc/resolv.conf -p wa -k dns_modification
+
+# ============================================================================
+# Security tools configuration
+# ============================================================================
+-w /etc/fail2ban/ -p wa -k fail2ban_modification
+-w /opt/server-security/ -p wa -k server_security
+
+# ============================================================================
+# PAM configuration
+# ============================================================================
+-w /etc/pam.d/ -p wa -k pam_modification
+-w /etc/security/ -p wa -k security_modification
+
+# ============================================================================
+# Kernel modules
+# ============================================================================
+-w /sbin/insmod -p x -k kernel_modules
+-w /sbin/rmmod -p x -k kernel_modules
+-w /sbin/modprobe -p x -k kernel_modules
+
+# ============================================================================
+# Make the configuration immutable (requires reboot to change)
+# Uncomment the line below after testing
+# ============================================================================
+# -e 2

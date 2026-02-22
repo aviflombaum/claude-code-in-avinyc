@@ -1,6 +1,7 @@
 ---
 name: rails
 description: Ruby and Rails best practices following POODR and Refactoring Ruby. Use for Rails development guidance, code quality, dependency injection, small methods, and OOP principles. Triggers on "rails best practice", "poodr", "refactoring", "ruby oop", "code quality".
+argument-hint: "[code pattern or question]"
 user-invocable: true
 ---
 

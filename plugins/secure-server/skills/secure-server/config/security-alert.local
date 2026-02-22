@@ -1,0 +1,15 @@
+# /etc/fail2ban/action.d/security-alert.local
+# Custom action to send alerts to Cloudflare Worker
+
+[Definition]
+
+# Action to perform when banning
+actionban = /opt/server-security/scripts/send-alert.sh "fail2ban_ban" "Banned IP <ip> for <name> (failures: <failures>)" "high"
+
+# Action to perform when unbanning (optional, lower priority)
+actionunban = /opt/server-security/scripts/send-alert.sh "fail2ban_unban" "Unbanned IP <ip> for <name>" "low"
+
+# Required empty definitions
+actionstart =
+actionstop =
+actioncheck =

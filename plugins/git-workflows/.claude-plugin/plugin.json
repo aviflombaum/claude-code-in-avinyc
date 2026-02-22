@@ -3,7 +3,8 @@
   "description": "Git workflow automation for Rails projects. Includes intelligent commit grouping and worktree management with Rails credential symlinking.",
   "version": "1.4.0",
   "author": {
-    "name": "Avi Flombaum"
+    "name": "Avi Flombaum",
+    "email": "im@avi.nyc"
   },
   "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
   "repository": "https://github.com/aviflombaum/claude-code-in-avinyc",
