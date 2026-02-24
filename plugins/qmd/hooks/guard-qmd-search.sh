@@ -1,5 +1,5 @@
 #!/bin/bash
-# PreToolUse guard: enforce qmd-search skill before Glob/Grep/Task on indexed directories.
+# PreToolUse guard: enforce qmd-search before Glob/Grep/Task on indexed directories.
 # Reads guardedDirs from .claude/qmd.json — exits 0 (allow) if no config or guard disabled.
 # Exit 2 = block with message, Exit 0 = allow
 

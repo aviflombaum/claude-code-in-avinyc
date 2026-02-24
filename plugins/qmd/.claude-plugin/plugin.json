@@ -1,7 +1,7 @@
 {
   "name": "qmd",
   "description": "Generic qmd semantic search plugin: per-project setup interview, smart search across collections, guard hooks to enforce qmd-first workflow",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "author": {
     "name": "Avi Flombaum",
     "email": "im@avi.nyc"

@@ -111,7 +111,7 @@
     {
       "name": "qmd",
       "source": "./plugins/qmd",
-      "version": "1.0.0",
+      "version": "1.4.0",
       "description": "Generic qmd semantic search: per-project setup interview, smart search across collections, guard hooks for qmd-first workflow",
       "author": { "name": "Avi Flombaum" },
       "homepage": "https://github.com/aviflombaum/claude-code-in-avinyc",
