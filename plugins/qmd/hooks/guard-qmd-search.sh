@@ -2,6 +2,7 @@
 # PreToolUse guard: enforce qmd-search before Glob/Grep/Task on indexed directories.
 # Reads guardedDirs from .claude/qmd.json — exits 0 (allow) if no config or guard disabled.
 # Exit 2 = block with message, Exit 0 = allow
+# No external dependencies (no jq required).
 
 set -euo pipefail
 
@@ -13,18 +14,20 @@ if [[ ! -f "$CONFIG_FILE" ]]; then
 fi
 
 # Check guard flag — if false or missing, allow
-GUARD=$(jq -r '.guard // false' "$CONFIG_FILE" 2>/dev/null)
-
-if [[ "$GUARD" != "true" ]]; then
+if ! grep -q '"guard"[[:space:]]*:[[:space:]]*true' "$CONFIG_FILE" 2>/dev/null; then
   exit 0
 fi
 
-# Read guarded dirs and build regex pattern (properly escaping metacharacters)
+# Extract guardedDirs array entries via grep/tr (no jq)
+# Handles both single-line and multi-line JSON arrays
 escape_regex() {
   printf '%s' "$1" | sed 's/[.[\(*+?{|^$\\]/\\&/g'
 }
 
 GUARDED_PATTERN=""
+# Flatten file, extract "guardedDirs":[...], pull out quoted strings, skip the key
+GUARDED_DIRS=$(tr -d '\n' < "$CONFIG_FILE" | grep -o '"guardedDirs"[^]]*\]' | grep -o '"[^"]*"' | grep -v 'guardedDirs' | tr -d '"') || true
+
 while IFS= read -r dir; do
   [[ -z "$dir" ]] && continue
   escaped=$(escape_regex "$dir")
@@ -33,7 +36,7 @@ while IFS= read -r dir; do
   else
     GUARDED_PATTERN="$GUARDED_PATTERN|$escaped"
   fi
-done < <(jq -r '.guardedDirs[]? // empty' "$CONFIG_FILE" 2>/dev/null)
+done <<< "$GUARDED_DIRS"
 
 # No guarded dirs → allow
 if [[ -z "$GUARDED_PATTERN" ]]; then
@@ -41,12 +44,20 @@ if [[ -z "$GUARDED_PATTERN" ]]; then
 fi
 GUARDED_PATTERN="$GUARDED_PATTERN)"
 
-# Parse hook input via jq
+# Read hook input from stdin
 HOOK_DATA=$(cat)
-TOOL_NAME=$(echo "$HOOK_DATA" | jq -r '.tool_name // ""' 2>/dev/null)
-INPUT_PATH=$(echo "$HOOK_DATA" | jq -r '.tool_input.path // ""' 2>/dev/null)
-INPUT_PATTERN=$(echo "$HOOK_DATA" | jq -r '.tool_input.pattern // ""' 2>/dev/null)
-INPUT_PROMPT=$(echo "$HOOK_DATA" | jq -r '.tool_input.prompt // ""' 2>/dev/null)
+
+# Extract JSON values via grep/sed (no jq)
+# These patterns work on the single-line JSON that Claude Code sends to hooks.
+extract_json_string() {
+  local key="$1" data="$2"
+  echo "$data" | grep -o "\"$key\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" | head -1 | sed 's/.*:[[:space:]]*"\(.*\)"/\1/'
+}
+
+TOOL_NAME=$(extract_json_string "tool_name" "$HOOK_DATA") || true
+INPUT_PATH=$(extract_json_string "path" "$HOOK_DATA") || true
+INPUT_PATTERN=$(extract_json_string "pattern" "$HOOK_DATA") || true
+INPUT_PROMPT=$(extract_json_string "prompt" "$HOOK_DATA") || true
 
 # Check if a value targets a guarded directory
 targets_guarded_dir() {
