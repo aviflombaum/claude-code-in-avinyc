@@ -4,7 +4,7 @@ This file provides guidance to AI coding agents when working with this repositor
 
 ## Overview
 
-This is an agent skills marketplace for Ruby, Rails, and SaaS development. It contains 8 plugins with 11 skills and 8 commands that extend AI coding agents with specialized capabilities.
+This is an agent skills marketplace for Ruby, Rails, and SaaS development. It contains plugins with skills that extend AI coding agents with specialized capabilities.
 
 ## Installation
 
@@ -63,7 +63,7 @@ skills/                      # Flat skill directory for npx add-skill
   settings.local.json        # Local settings
 
 .claude-plugin/
-  marketplace.json           # Marketplace manifest (v1.3.2)
+  marketplace.json           # Marketplace manifest
 
 .github/
   workflows/
@@ -78,110 +78,113 @@ scripts/
 plugins/
   rspec-writer/
     .claude-plugin/plugin.json
-    commands/write-test.md        # "/" command wrapper
-    skills/write-test/SKILL.md    # Skill with full instructions
+    skills/write-test/SKILL.md    # /rspec:write-test
     skills/write-test/patterns/   # Supporting reference files
 
   rails-frontend/
     .claude-plugin/plugin.json
-    commands/hotwire.md           # "/" command wrapper
-    skills/hotwire/SKILL.md
-    skills/tailwind/SKILL.md      # Skill-only (no command)
+    skills/hotwire/SKILL.md       # /rails-frontend:hotwire
+    skills/tailwind/SKILL.md      # Auto-triggered (background knowledge)
 
   rails-expert/
     .claude-plugin/plugin.json
-    skills/rails/SKILL.md         # Skill-only (no command)
+    skills/rails/SKILL.md         # Auto-triggered (background knowledge)
 
   design-system/
     .claude-plugin/plugin.json
-    commands/web-design.md        # "/" command wrapper
-    skills/web-design/SKILL.md
-    skills/ux-ui/SKILL.md         # Skill-only (no command)
+    skills/web-design/SKILL.md    # /design-system:web-design
+    skills/ux-ui/SKILL.md         # Auto-triggered (background knowledge)
 
   saas-metrics/
     .claude-plugin/plugin.json
-    commands/business.md          # "/" command wrapper
-    commands/marketing.md         # "/" command wrapper
-    skills/business/SKILL.md
-    skills/marketing/SKILL.md
+    skills/business/SKILL.md      # /saas-metrics:business
+    skills/marketing/SKILL.md     # /saas-metrics:marketing
 
   tech-writer/
     .claude-plugin/plugin.json
-    commands/write.md             # "/" command wrapper
-    skills/write/SKILL.md
+    skills/write/SKILL.md         # /tech-writer:write
 
   compound-analyzer/
     .claude-plugin/plugin.json
-    commands/analyze.md           # "/" command wrapper
-    skills/analyze/SKILL.md
+    skills/analyze/SKILL.md       # /compound-analyzer:analyze
 
   plan-interview/
     .claude-plugin/plugin.json
-    commands/interview.md         # "/" command wrapper
-    skills/interview/SKILL.md
+    skills/interview/SKILL.md     # /plan-interview:interview
+
+  qmd/
+    .claude-plugin/plugin.json
+    skills/search/SKILL.md        # /qmd:search
+    skills/configure/SKILL.md     # /qmd:configure
+    skills/doctor/SKILL.md        # /qmd:doctor
+    skills/status/SKILL.md        # /qmd:status
+    hooks/hooks.json              # Guard hook for qmd-first workflow
+    hooks/guard-qmd-search.sh
+    scripts/                      # Utility scripts (doctor, git hook, etc.)
 ```
 
 ## Plugin Architecture
 
-### Commands vs Skills
+### Skills
 
-This marketplace uses both commands and skills. Understanding the difference is critical:
+Skills are the core building block. Each skill is a `SKILL.md` file inside `skills/<name>/`. Skills automatically:
 
-| Aspect | Commands | Skills |
-|--------|----------|--------|
-| Location | `commands/*.md` | `skills/*/SKILL.md` |
-| "/" autocomplete | Yes | No |
-| Auto-detection | No | Yes (based on conversation) |
-| User invokes with | `/command-name args` | Just describe what you need |
-| Purpose | Discoverability | Contextual knowledge |
+- Appear in the `/` autocomplete menu (as `/plugin:skill-name`)
+- Can be auto-triggered by Claude based on the `description` field
+- Accept arguments via `$ARGUMENTS`
 
-**Pattern:** Action-oriented features get BOTH a skill (for auto-detection) and a thin command wrapper (for "/" discoverability). Contextual knowledge features get skills only.
+> **Note:** Claude Code previously supported a separate `commands/` directory for slash commands. This is now **legacy** — skills handle both discoverability and auto-triggering. Some plugins in this marketplace still have `commands/` wrappers from before this change; see `plans/deprecate-commands.md` for the migration plan.
 
-### When to Create a Command
+### Skill Types
 
-Create a command wrapper when the skill represents an **action** the user would explicitly invoke:
-- `/rspec:write-test model User` - explicit action
-- `/compound:analyze this workflow` - explicit action
-- `/avinyc:interview this plan` - explicit action
+Skills fall into two categories based on their frontmatter:
 
-Skip the command when the skill is **contextual knowledge** that should auto-trigger:
-- `rails` - best practices applied automatically when discussing Rails
-- `tailwind` - styling knowledge applied automatically
-- `ux-ui` - usability principles applied automatically
+| Type | Frontmatter | `/` menu | Auto-triggered | Example |
+|------|-------------|----------|----------------|---------|
+| **Action** | (defaults) | Yes | Yes | `write-test`, `search`, `analyze` |
+| **Action (user-only)** | `disable-model-invocation: true` | Yes | No | Skills with side effects |
+| **Background knowledge** | `user-invocable: false` | No | Yes | `rails`, `tailwind`, `ux-ui` |
 
-### Command Namespace Conventions
+### Skill Definition
 
-Commands use namespaces to avoid conflicts and clarify purpose:
+Skills use YAML frontmatter in `SKILL.md`:
 
-| Namespace | Use For | Examples |
-|-----------|---------|----------|
-| `avinyc:*` | Personal style, aesthetics, opinions | `avinyc:write`, `avinyc:web-design`, `avinyc:interview` |
-| `compound:*` | Compound engineering methodology | `compound:analyze` |
-| `saas:*` | SaaS domain knowledge | `saas:business`, `saas:marketing` |
-| `rspec:*` | Framework-specific tools | `rspec:write-test` |
-| (no namespace) | When the name IS the thing | `/hotwire` |
-
-**Principle:** Use `avinyc:` for opinionated/personal style. Use domain/framework prefixes for standard tools. Skip namespace only when the command name is already specific enough.
-
-### Command Wrapper Template
-
-Commands are thin wrappers that invoke skills:
-
-```markdown
+```yaml
 ---
-name: command-name
-description: Brief action description (5-10 words)
-argument-hint: "[args]"
+name: skill-name
+description: When to trigger this skill (include trigger phrases)
+argument-hint: "[optional args]"
 ---
 
-Invoke the plugin-name:skill-name skill for: $ARGUMENTS
+# Skill Title
+
+Instructions for the skill...
 ```
+
+**Supported frontmatter fields:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `name` | directory name | Display name; becomes the `/slash-command`. Lowercase, hyphens, max 64 chars. |
+| `description` | first paragraph | Used for auto-triggering and shown in autocomplete. Include trigger phrases. |
+| `argument-hint` | none | Hint shown during autocomplete (e.g., `[issue-number]`) |
+| `user-invocable` | `true` | Set `false` to hide from `/` menu (background knowledge only) |
+| `disable-model-invocation` | `false` | Set `true` to prevent Claude from auto-triggering |
+| `allowed-tools` | all tools | Restrict tool access (e.g., `["Read", "Grep", "Glob"]`) |
+| `model` | current model | Force a specific model (e.g., `haiku`, `sonnet`) |
+| `context` | none | Set `fork` to run in an isolated subagent |
+| `agent` | none | Subagent type when `context: fork` (e.g., `Explore`) |
+
+**String substitutions** available in skill content:
+- `$ARGUMENTS` — all arguments passed when invoking
+- `$ARGUMENTS[N]` or `$N` — positional arguments (0-indexed)
+- `${CLAUDE_PLUGIN_ROOT}` — absolute path to the plugin root
+- `` !`command` `` — shell command preprocessing
 
 ### Marketplace Manifest
 
 `.claude-plugin/marketplace.json` defines:
 - Marketplace name and owner
-- Version (currently 1.2.0)
 - Array of plugins with source paths and metadata
 
 ### Plugin Manifest
@@ -197,42 +200,31 @@ Each plugin has `.claude-plugin/plugin.json`:
 }
 ```
 
-### Skill Definition
-
-Skills use YAML frontmatter in `SKILL.md`:
-```yaml
----
-name: skill-name
-description: When to trigger this skill (include trigger phrases)
-argument-hint: "[optional args]"
-user-invocable: true
----
-
-# Skill Title
-
-Instructions for the skill...
-```
+Additional optional fields: `homepage`, `repository`, `license`, `commands`, `agents`, `skills`, `hooks`, `mcpServers`, `outputStyles`, `lspServers`.
 
 ## Current Plugins Summary
 
-| Plugin | "/" Commands | Skills (auto-triggered) | Purpose |
-|--------|--------------|------------------------|---------|
-| rspec-writer | `/rspec:write-test` | write-test | Generate RSpec tests |
-| rails-frontend | `/hotwire` | hotwire, tailwind | Turbo, Stimulus, Tailwind |
-| rails-expert | - | rails | POODR and Refactoring Ruby |
-| design-system | `/avinyc:web-design` | web-design, ux-ui | Visual design and usability |
-| saas-metrics | `/saas:business`, `/saas:marketing` | business, marketing | LTV, CAC, funnels |
-| tech-writer | `/avinyc:write` | write | Blog posts, tutorials |
-| compound-analyzer | `/compound:analyze` | analyze | Automation opportunities |
-| plan-interview | `/avinyc:interview` | interview | Socratic questioning |
+| Plugin | Skills | Purpose |
+|--------|--------|---------|
+| rspec-writer | write-test | Generate RSpec tests |
+| rails-frontend | hotwire, tailwind* | Turbo, Stimulus, Tailwind |
+| rails-expert | rails* | POODR and Refactoring Ruby |
+| design-system | web-design, ux-ui* | Visual design and usability |
+| saas-metrics | business, marketing | LTV, CAC, funnels |
+| tech-writer | write | Blog posts, tutorials |
+| compound-analyzer | analyze | Automation opportunities |
+| plan-interview | interview | Socratic questioning |
+| qmd | search, configure, doctor, status | Semantic search for project docs |
+
+\* = background knowledge skill (`user-invocable: false`), auto-triggered only.
 
 ## Adding New Plugins
 
 1. Create `plugins/<name>/.claude-plugin/plugin.json`
 2. Add skills under `plugins/<name>/skills/<skill-name>/SKILL.md`
-3. If the skill is action-oriented, add a command wrapper in `plugins/<name>/commands/<command-name>.md`
-4. Register in `.claude-plugin/marketplace.json`
-5. Update README.md with plugin documentation
+3. Register in `.claude-plugin/marketplace.json`
+4. Add symlinks in `skills/` for cross-platform compatibility
+5. Update this file and README.md
 
 ## Local Development
 
@@ -303,15 +295,15 @@ To revert to loading from GitHub, change `known_marketplaces.json` source back t
 - Skills should include trigger phrases in descriptions
 - Use `argument-hint` for skills that accept arguments
 - Pattern files go in subdirectories under the skill
-- Action-oriented skills get command wrappers for "/" discoverability
-- Contextual knowledge skills remain skill-only (auto-triggered)
+- Background knowledge skills use `user-invocable: false`
+- Action skills use defaults (visible in `/` menu + auto-triggered)
 
 ## Versioning
 
 **Critical:** Claude Code detects updates by comparing `version` in each `plugin.json`, NOT the marketplace metadata version. If you don't bump plugin versions, updates won't propagate to users.
 
 **When to bump versions:**
-- Adding new commands or skills
+- Adding new skills
 - Modifying skill instructions or behavior
 - Changing plugin.json metadata
 - Any change users should receive via auto-update
@@ -319,7 +311,6 @@ To revert to loading from GitHub, change `known_marketplaces.json` source back t
 **Where versions live:**
 - `plugin.json` - Required, triggers update detection
 - `marketplace.json` plugins array - Should match plugin.json
-- `SKILL.md` frontmatter - No version field (not supported)
 
 ### Version Bump Tooling
 
@@ -345,7 +336,7 @@ Updates both `plugin.json` and `marketplace.json` atomically.
 - Validates version consistency between `plugin.json` and `marketplace.json`
 - Checks if plugin files changed without version bump
 - Validates JSON syntax for all plugin manifests
-- Verifies plugin structure (manifest + skills/commands/agents)
+- Verifies plugin structure (manifest + skills)
 - Comments on PR with instructions if validation fails
 
 ### Version Workflow
@@ -359,7 +350,7 @@ Updates both `plugin.json` and `marketplace.json` atomically.
 
 When modifying plugins, ensure all related files are updated:
 
-- [ ] Update command/skill content (commands/*.md, skills/*/SKILL.md)
+- [ ] Update skill content (skills/*/SKILL.md)
 - [ ] Update plugin README.md with new examples
 - [ ] Update main README.md tables and examples
 - [ ] Update CLAUDE.md if conventions changed

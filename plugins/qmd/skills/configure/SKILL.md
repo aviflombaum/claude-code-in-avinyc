@@ -24,8 +24,10 @@ Then STOP.
 
 ## Step 2: Derive project name
 
+Get the git repo folder name and normalize it:
+
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/qmd-derive-name.sh
+basename "$(git rev-parse --show-toplevel)" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/_/g; s/__*/_/g; s/^_//; s/_$//'
 ```
 
 Show the derived name to the user via `AskUserQuestion`. Let them confirm or type a custom name. Once confirmed, this is the canonical project name used for all collection prefixes.
@@ -52,7 +54,7 @@ For each selected directory, use `AskUserQuestion` to:
 - Ask for a short description of what the directory contains (e.g., "Project architecture and feature docs")
 - Confirm the file pattern (default: `**/*.md`, offer alternatives like `**/*.{md,txt}`)
 
-## Step 6: Add collections via wrapper scripts
+## Step 6: Add collections
 
 For each selected directory, derive the collection name: `{project}_{dirname}` where dirname has `/` and `.` replaced with `_` and leading dots stripped. Example: `.cursor/rules` → `cursor_rules`, so collection is `myproject_cursor_rules`.
 
@@ -65,14 +67,16 @@ echo "$(git rev-parse --show-toplevel)/<dirname>"
 Then add the collection:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/qmd-add-collection.sh "<collection_name>" "<absolute_path>" "<pattern>" "<description>"
+qmd collection add "<absolute_path>" --name "<collection_name>" --mask "<pattern>"
+qmd context add "qmd://<collection_name>/" "<description>"
 ```
 
-If the script exits 1 (collection already exists), ask the user whether to overwrite. If yes:
+If `qmd collection add` fails (collection already exists), ask the user whether to overwrite. If yes:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/qmd-remove-collection.sh "<collection_name>"
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/qmd-add-collection.sh "<collection_name>" "<absolute_path>" "<pattern>" "<description>"
+qmd collection remove "<collection_name>"
+qmd collection add "<absolute_path>" --name "<collection_name>" --mask "<pattern>"
+qmd context add "qmd://<collection_name>/" "<description>"
 ```
 
 ## Step 7: Write project config
@@ -100,7 +104,7 @@ Use the Write tool to create `.claude/qmd.json`:
 ## Step 8: Generate embeddings
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/qmd-index.sh
+qmd update && qmd embed
 ```
 
 Tell the user it's generating embeddings.
@@ -119,13 +123,20 @@ Use `AskUserQuestion`: "Install a git post-commit hook? When enabled, committing
 
 Options: "Yes, install hook" / "No, skip"
 
-If yes:
+If yes, install the hook by appending to `.git/hooks/post-commit` (create the file if needed, ensure it's executable):
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/install-git-hook.sh <project_name>
+# qmd-auto-index:<project_name>
+# Auto-update qmd index when markdown files change
+export PATH="$HOME/.bun/bin:$HOME/.local/bin:$PATH"
+if command -v qmd &>/dev/null; then
+  if git diff-tree --no-commit-id --name-only -r HEAD | grep -q '\.md$'; then
+    (qmd update && qmd embed) &>/dev/null &
+  fi
+fi
 ```
 
-Update `.claude/qmd.json` to set `"gitHook": true`.
+Check for the marker comment `# qmd-auto-index:<project_name>` first to avoid duplicates. Update `.claude/qmd.json` to set `"gitHook": true`.
 
 ## Step 11: Print summary
 

@@ -13,10 +13,10 @@ allowed-tools: ["Bash", "Read"]
 - Guard hook: enabled/disabled
 - Git hook: installed/not installed
 
-**Step 2:** Run the status script:
+**Step 2:** Run qmd status:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/qmd-status.sh
+qmd status
 ```
 
-Display the raw script output alongside the config summary.
+Display the output alongside the config summary.

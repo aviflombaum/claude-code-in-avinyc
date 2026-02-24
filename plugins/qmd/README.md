@@ -1,19 +1,19 @@
 # qmd Plugin
 
-Generic qmd semantic search for any project. Interviews you on first use, configures collections in the default qmd index, and provides fast search from that point forward. All qmd CLI operations go through bash wrapper scripts for consistency and debuggability.
+Semantic search for any project's documentation. Interviews you on first use, configures collections in the default qmd index, and provides fast search from that point forward.
 
 ## Installation
 
 Enable `qmd@claude-code-in-avinyc` in your Claude Code settings.
 
-## Commands
+## Skills
 
-| Command | Purpose |
-|---------|---------|
-| `/qmd:configure` | Set up or reconfigure qmd for this project |
-| `/qmd:search <query>` | Search indexed collections |
-| `/qmd:status` | Show project config and index status |
-| `/qmd:doctor` | Run 13-point health check |
+| Skill | Invocation | Purpose |
+|-------|-----------|---------|
+| search | `/qmd:search <query>` | Search indexed collections |
+| configure | `/qmd:configure` | Set up or reconfigure qmd for this project |
+| status | `/qmd:status` | Show project config and index status |
+| doctor | `/qmd:doctor` | Run health check |
 
 ### Configure (first run)
 
@@ -39,6 +39,8 @@ Idempotent — run again to reconfigure.
 /qmd:search deployment configuration
 ```
 
+Three search modes: `qmd search` (BM25 keyword), `qmd vsearch` (vector/semantic), `qmd query` (auto-expand + rerank). The skill picks the right one for the query.
+
 ### Status
 
 ```
@@ -51,7 +53,7 @@ Idempotent — run again to reconfigure.
 /qmd:doctor
 ```
 
-Runs 13 checks: qmd binary, config validity, collection existence, naming conventions, git hook state, guard config consistency, and YAML/SQLite sync.
+Runs checks for: qmd binary, config validity, collection existence, naming conventions, git hook state, guard config consistency, and YAML/SQLite sync.
 
 ## Config Format
 
@@ -72,33 +74,29 @@ Per-project config at `.claude/qmd.json`:
 
 Collection naming convention: `{project}_{type}` with underscores. All collections live in the default qmd index (`~/.cache/qmd/index.sqlite`).
 
-## Scripts
-
-All qmd CLI access goes through thin bash wrappers in `scripts/`:
-
-| Script | Wraps |
-|--------|-------|
-| `qmd-add-collection.sh` | `qmd collection add` + `qmd context add` |
-| `qmd-remove-collection.sh` | `qmd collection remove` |
-| `qmd-list-collections.sh` | `qmd collection list` |
-| `qmd-search.sh` | `qmd search` (with `--json -c -n`) |
-| `qmd-vsearch.sh` | `qmd vsearch` (with `--json -c -n`) |
-| `qmd-index.sh` | `qmd update` + `qmd embed` |
-| `qmd-status.sh` | `qmd status` |
-| `qmd-derive-name.sh` | Project name from git folder |
-| `qmd-doctor.sh` | 13-point health check |
-| `install-git-hook.sh` | Git post-commit hook |
-
 ## Hooks
-
-### Bash Guard Hook
-
-A PreToolUse hook on `Bash` blocks direct `qmd` CLI commands and requires wrapper scripts. This prevents the LLM from bypassing the scripts and calling `qmd` directly. Only active when `.claude/qmd.json` exists. Allows `command -v qmd` (install check) and any command going through `scripts/`.
 
 ### Directory Guard Hook
 
-When enabled (`guard: true` in config), blocks Glob/Grep on indexed directories and redirects to `/qmd:search`. Config-gated: zero overhead in unconfigured projects.
+When enabled (`guard: true` in config), a PreToolUse hook on Glob/Grep/Task blocks searches on indexed directories and redirects to `/qmd:search`. This enforces a qmd-first workflow. Config-gated: zero overhead in unconfigured projects.
 
 ### Git Post-Commit Hook
 
-When enabled, auto-runs `qmd update && qmd embed` in the background on commits that touch `.md` files. Uses the default index (no `--index` flag).
+When enabled via `/qmd:configure`, auto-runs `qmd update && qmd embed` in the background on commits that touch `.md` files.
+
+## Scripts
+
+Utility scripts in `scripts/` used by the doctor skill and configure flow:
+
+| Script | Purpose |
+|--------|---------|
+| `qmd-doctor.sh` | Health check (called by doctor skill) |
+| `install-git-hook.sh` | Git post-commit hook installer |
+| `qmd-add-collection.sh` | `qmd collection add` + `qmd context add` |
+| `qmd-remove-collection.sh` | `qmd collection remove` |
+| `qmd-list-collections.sh` | `qmd collection list` |
+| `qmd-search.sh` | BM25 search with correct flags |
+| `qmd-vsearch.sh` | Semantic search with correct flags |
+| `qmd-index.sh` | `qmd update` + `qmd embed` |
+| `qmd-status.sh` | `qmd status` |
+| `qmd-derive-name.sh` | Project name from git folder |

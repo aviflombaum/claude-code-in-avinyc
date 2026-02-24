@@ -1,5 +1,5 @@
 {
-  "description": "QMD plugin hooks: guard Glob/Grep/Task on indexed dirs, block direct qmd CLI usage",
+  "description": "QMD plugin hooks: guard Glob/Grep/Task on indexed dirs to enforce qmd-first workflow",
   "hooks": {
     "PreToolUse": [
       {
@@ -28,16 +28,6 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/guard-qmd-search.sh",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/guard-qmd-bash.sh",
             "timeout": 5
           }
         ]

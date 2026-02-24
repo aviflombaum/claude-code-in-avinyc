@@ -4,68 +4,83 @@ description: Search project documentation using qmd semantic search. Use BEFORE 
 argument-hint: "<search query>"
 user-invocable: true
 allowed-tools: ["Bash", "Read"]
+model: haiku
 ---
 
 # QMD Search
 
-Search indexed collections using qmd for fast, relevant results before falling back to manual file exploration.
+## STOP — Read Config First
 
-## Prerequisites
+1. Use the **Read tool** to read `.claude/qmd.json`. If missing, tell the user: "qmd is not configured for this project. Run `/qmd:configure` to set it up." Then STOP.
+2. Extract `project` name and `collections` (each has: name, path, pattern, description).
+3. Pick the best collection for the query (match against descriptions). If only one, use it.
 
-Read `.claude/qmd.json`. If the file is missing, tell the user: "qmd is not configured for this project. Run `/qmd:configure` to set it up." Then STOP.
+**Every qmd command MUST include `--json` and `-c <collection_name>`.** No exceptions.
 
-## Search Flow
+## Do NOT
 
-### Step 1: Load config
+- Run qmd without `--json` flag
+- Run qmd without `-c <collection>`
+- Use `npx` to run qmd — it is already installed
+- Use `qmd get` to read files — use the Read tool//
+- Use the `--full` flag — it floods the context window
+- Skip reading `.claude/qmd.json` before searching
 
-Extract from `.claude/qmd.json`:
-- `project`: the project name
-- `collections`: map of collection name → {path, pattern, description}
+## Query Types
 
-### Step 2: Choose collection
+qmd provides three search commands. Pick the right one for the situation:
 
-- **Single collection**: use it directly
-- **Multiple collections**: match the query against collection descriptions to pick the best one. If ambiguous, search the most likely collection first. If results are poor, try the next.
+### `qmd search` — BM25 keyword search
 
-### Step 3: Run BM25 search
-
-```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/qmd-search.sh "<query>" "<collection_name>" 5
-```
-
-### Step 4: Evaluate results
-
-- **0.7+**: Highly relevant, read this document
-- **0.5-0.7**: Worth reading if topic matches
-- **< 0.5 on all results**: Fall back to vsearch
-
-### Step 5: Fallback to vsearch if needed
+Best when you know the exact terms or vocabulary used in the documents.
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/qmd-vsearch.sh "<query>" "<collection_name>" 5
+qmd search "<query>" -c <collection> --json -n 5
 ```
 
-### Step 6: Read top results
+**Query writing tips:**
+- Use 2-5 specific terms, no filler words
+- Use exact phrases with quotes: `qmd search "error handling" -c col --json -n 5`
+- Exclude terms with minus: `qmd search "auth -oauth" -c col --json -n 5`
+- Think about what words actually appear in the documents
 
-For each relevant result:
-1. Extract the file path from the `file` field
-2. Strip the `qmd://<collection_name>/` prefix
-3. Prepend the collection's `path` from config to get the repo-relative path
-4. Use the **Read tool** to read the file
+### `qmd vsearch` — Vector/semantic search
 
-### Step 7: Retry or fall back
+Best when you don't know the exact vocabulary or want conceptual matching.
 
-- If results are still poor after vsearch, refine the query and try again (max 2 retries)
-- After retries exhausted, fall back to Glob/Grep on the directory
+```bash
+qmd vsearch "<query>" -c <collection> --json -n 5
+```
 
-## Rules
+**Query writing tips:**
+- Write a full natural language question
+- Be specific about what you're looking for
+- Good: `"How does the authentication system handle session expiry?"`
+- Bad: `"auth sessions"`
 
-- **Use wrapper scripts** in `${CLAUDE_PLUGIN_ROOT}/scripts/` for all qmd operations (direct `qmd` calls are blocked by a hook)
-- **Start with BM25** (`qmd-search.sh`), fall back to vsearch only if scores < 0.5
-- **Use the Read tool** to read result files, not `qmd get`
-- **Default to 5 results** (3rd argument: use `3` for narrow queries, `10` for broad)
+### `qmd query` — Auto-expand + rerank (most powerful)
 
-## Interpreting Results
+Best for complex topics. Automatically generates query variations and reranks results.
+
+```bash
+qmd query "<query>" -c <collection> --json -n 5
+```
+
+**Query writing tips:**
+- Use for complex or multi-faceted topics
+- Write naturally — the system auto-generates search variations
+- Good for exploratory searches where you're not sure what you'll find
+
+## Strategy
+
+| Situation | Use |
+|-----------|-----|
+| Know exact terms | `qmd search` |
+| Don't know vocabulary | `qmd vsearch` or `qmd query` |
+| Best recall needed | Try `search` first, `vsearch` if poor results |
+| Complex or broad topic | `qmd query` |
+
+## Reading Results
 
 JSON output contains an array:
 
@@ -82,7 +97,17 @@ JSON output contains an array:
 ]
 ```
 
-1. Review `title` and `snippet` for relevance
-2. Extract file path: strip `qmd://<collection>/` prefix
-3. Build repo path: `<collection_path_from_config>/<stripped_path>`
-4. Use the Read tool to read the file
+**Score interpretation:**
+- **0.7+**: Highly relevant — read this document
+- **0.5-0.7**: Worth reading if topic matches
+- **< 0.5 on all results**: Try a different query type or refine your query
+
+**To read a result file:**
+1. Extract the file path from the `file` field
+2. Strip the `qmd://<collection>/` prefix
+3. Prepend the collection's `path` from config to get the repo-relative path
+4. Use the **Read tool** to read the file
+
+## Fallback
+
+After poor results from 2 query types or 2 retries with refined queries, fall back to Glob/Grep on the directory. Default `-n 5` (use `3` for narrow queries, `10` for broad).
