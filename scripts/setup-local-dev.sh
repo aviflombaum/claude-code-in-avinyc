@@ -1,18 +1,24 @@
 #!/bin/bash
-#
-# Configure Claude Code to load this marketplace from local directory
-#
-# This script:
-# 1. Updates ~/.claude/plugins/known_marketplaces.json to use local source
-# 2. Ensures all plugins are enabled in .claude/settings.local.json
-#
-# Usage: ./scripts/setup-local-dev.sh
+# ============================================================================
+# Name:        setup-local-dev.sh
+# Version:     1.0.0
+# Description: Configure Claude Code to load marketplace from local directory
+# Source:      claude-code-in-avinyc/scripts/setup-local-dev.sh
+# Usage:       ./scripts/setup-local-dev.sh [marketplace-name] [github-repo]
+# Requires:    bash 4+, node
+# Updated:     2026-03-13
+# ============================================================================
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
-MARKETPLACE_NAME="claude-code-in-avinyc"
+# Auto-detect or use args
+if [ -n "$1" ]; then
+    MARKETPLACE_NAME="$1"
+else
+    MARKETPLACE_NAME=$(node -e "const d=require('$ROOT_DIR/.claude-plugin/marketplace.json');console.log(d.name)" 2>/dev/null || grep -o '"name": *"[^"]*"' "$ROOT_DIR/.claude-plugin/marketplace.json" | head -1 | sed 's/"name": *"\([^"]*\)"/\1/')
+fi
 KNOWN_MARKETPLACES="$HOME/.claude/plugins/known_marketplaces.json"
 LOCAL_SETTINGS="$ROOT_DIR/.claude/settings.local.json"
 

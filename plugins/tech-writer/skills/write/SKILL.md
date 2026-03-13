@@ -1,5 +1,5 @@
 ---
-name: write
+name: avinyc:write
 description: Write technical blog posts, tutorials, and documentation in Flatiron School's engaging style. Use for explaining code patterns, debugging stories, or turning complex topics into clear narratives. Triggers on "write a blog post", "tutorial about", "explain how", "technical writing".
 argument-hint: "[blog|tutorial|docs] topic"
 user-invocable: true

@@ -1,242 +1,40 @@
-name: Validate Plugin Versions
+name: Validate Marketplace
 
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'plugins/**'
-      - 'skills/**'
-      - '.claude-plugin/marketplace.json'
   push:
     branches: [main]
-    paths:
-      - 'plugins/**'
-      - 'skills/**'
-      - '.claude-plugin/marketplace.json'
-  workflow_dispatch:  # Allow manual trigger for testing
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   validate:
-    name: Check version consistency
+    name: Validate marketplace and plugins
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Need full history for branch comparison
+          fetch-depth: 0
 
-      - name: Validate plugin versions
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate Marketplace
+        run: ./scripts/validate-marketplace.sh --ci
+
+      - name: Check for unbumped versions
+        if: github.event_name == 'pull_request'
         run: |
-          # For PRs, compare against the base branch
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            BASE_BRANCH="${{ github.base_ref }}"
-          else
-            BASE_BRANCH="main"
-          fi
-
+          BASE_BRANCH="${{ github.base_ref }}"
           ./scripts/validate-versions.sh "$BASE_BRANCH"
-
-      - name: Validate plugin JSON syntax
-        run: |
-          echo "Validating plugin.json syntax..."
-          ERRORS=0
-
-          # Check marketplace.json
-          if ! node -e "JSON.parse(require('fs').readFileSync('.claude-plugin/marketplace.json'))" 2>/dev/null; then
-            echo "❌ Invalid JSON: .claude-plugin/marketplace.json"
-            ERRORS=$((ERRORS + 1))
-          else
-            echo "✅ .claude-plugin/marketplace.json"
-          fi
-
-          # Check all plugin.json files
-          for plugin_json in plugins/*/.claude-plugin/plugin.json; do
-            if [ -f "$plugin_json" ]; then
-              if ! node -e "JSON.parse(require('fs').readFileSync('$plugin_json'))" 2>/dev/null; then
-                echo "❌ Invalid JSON: $plugin_json"
-                ERRORS=$((ERRORS + 1))
-              else
-                echo "✅ $plugin_json"
-              fi
-            fi
-          done
-
-          if [ $ERRORS -gt 0 ]; then
-            echo ""
-            echo "❌ Found $ERRORS JSON syntax error(s)"
-            exit 1
-          fi
-          echo ""
-          echo "✅ All JSON files valid"
-
-      - name: Validate plugin structure
-        run: |
-          echo "Validating plugin structure..."
-          ERRORS=0
-
-          for plugin_dir in plugins/*/; do
-            plugin_name=$(basename "$plugin_dir")
-
-            # Check required manifest exists
-            if [ ! -f "$plugin_dir.claude-plugin/plugin.json" ]; then
-              echo "❌ Missing: $plugin_dir.claude-plugin/plugin.json"
-              ERRORS=$((ERRORS + 1))
-              continue
-            fi
-
-            # Check plugin has at least one component (skills, commands, or agents)
-            has_content=false
-            [ -d "${plugin_dir}skills" ] && has_content=true
-            [ -d "${plugin_dir}commands" ] && has_content=true
-            [ -d "${plugin_dir}agents" ] && has_content=true
-
-            if [ "$has_content" = false ]; then
-              echo "⚠️  Warning: $plugin_name has no skills/, commands/, or agents/"
-            else
-              echo "✅ $plugin_name"
-            fi
-          done
-
-          if [ $ERRORS -gt 0 ]; then
-            echo ""
-            echo "❌ Found $ERRORS structure error(s)"
-            exit 1
-          fi
-          echo ""
-          echo "✅ All plugins have valid structure"
-
-      - name: Validate SKILL.md frontmatter
-        run: |
-          echo "Validating SKILL.md frontmatter..."
-          ERRORS=0
-          WARNINGS=0
-
-          for skill_md in plugins/*/skills/*/SKILL.md; do
-            if [ -f "$skill_md" ]; then
-              skill_name=$(basename "$(dirname "$skill_md")")
-              plugin_name=$(echo "$skill_md" | cut -d'/' -f2)
-
-              # Check file starts with ---
-              if ! head -1 "$skill_md" | grep -q "^---$"; then
-                echo "❌ $plugin_name:$skill_name - Missing YAML frontmatter (must start with ---)"
-                ERRORS=$((ERRORS + 1))
-                continue
-              fi
-
-              # Extract frontmatter and check required fields
-              frontmatter=$(sed -n '1,/^---$/p' "$skill_md" | tail -n +2 | head -n -1)
-
-              # Check for 'name' field
-              if ! echo "$frontmatter" | grep -q "^name:"; then
-                echo "❌ $plugin_name:$skill_name - Missing 'name' in frontmatter"
-                ERRORS=$((ERRORS + 1))
-              fi
-
-              # Check for 'description' field
-              if ! echo "$frontmatter" | grep -q "^description:"; then
-                echo "❌ $plugin_name:$skill_name - Missing 'description' in frontmatter"
-                ERRORS=$((ERRORS + 1))
-              else
-                echo "✅ $plugin_name:$skill_name"
-              fi
-            fi
-          done
-
-          if [ $ERRORS -gt 0 ]; then
-            echo ""
-            echo "❌ Found $ERRORS SKILL.md error(s)"
-            exit 1
-          fi
-          echo ""
-          echo "✅ All SKILL.md files have valid frontmatter"
-
-      - name: Validate skills/ symlinks
-        run: |
-          echo "Validating skills/ directory symlinks..."
-          ERRORS=0
-
-          if [ -d "skills" ]; then
-            for link in skills/*/; do
-              link_name=$(basename "$link")
-              if [ -L "skills/$link_name" ]; then
-                target=$(readlink "skills/$link_name")
-                # Check if target exists (relative to skills/)
-                if [ ! -d "skills/$link_name" ]; then
-                  echo "❌ Broken symlink: skills/$link_name -> $target"
-                  ERRORS=$((ERRORS + 1))
-                else
-                  echo "✅ skills/$link_name -> $target"
-                fi
-              fi
-            done
-          else
-            echo "ℹ️  No skills/ directory found (optional for flat structure)"
-          fi
-
-          if [ $ERRORS -gt 0 ]; then
-            echo ""
-            echo "❌ Found $ERRORS broken symlink(s)"
-            exit 1
-          fi
-          echo ""
-          echo "✅ All symlinks valid"
-
-      - name: Validate marketplace registry
-        run: |
-          echo "Validating marketplace.json registry..."
-          ERRORS=0
-
-          # Get plugins from marketplace.json
-          marketplace_plugins=$(node -e "
-            const data = require('./.claude-plugin/marketplace.json');
-            data.plugins.forEach(p => console.log(p.name));
-          " 2>/dev/null)
-
-          # Get actual plugin directories
-          actual_plugins=$(ls -d plugins/*/ 2>/dev/null | xargs -I{} basename {} | sort)
-
-          # Plugins that are in-development and intentionally not in marketplace
-          EXCLUDED="secure-server test-plugin"
-
-          # Check each actual plugin is in marketplace
-          for plugin in $actual_plugins; do
-            if echo "$EXCLUDED" | grep -qw "$plugin"; then
-              echo "⏭️  $plugin excluded (in-development)"
-              continue
-            fi
-            if echo "$marketplace_plugins" | grep -q "^${plugin}$"; then
-              echo "✅ $plugin registered in marketplace.json"
-            else
-              echo "❌ $plugin missing from marketplace.json"
-              ERRORS=$((ERRORS + 1))
-            fi
-          done
-
-          # Check marketplace doesn't have ghost entries
-          for mp in $marketplace_plugins; do
-            if [ ! -d "plugins/$mp" ]; then
-              echo "❌ $mp in marketplace.json but plugins/$mp/ doesn't exist"
-              ERRORS=$((ERRORS + 1))
-            fi
-          done
-
-          if [ $ERRORS -gt 0 ]; then
-            echo ""
-            echo "❌ Found $ERRORS registry mismatch(es)"
-            exit 1
-          fi
-          echo ""
-          echo "✅ Marketplace registry matches plugins/"
-
-      - name: Check for .DS_Store
-        run: |
-          if find . -name ".DS_Store" | grep -q .; then
-            echo "ERROR: .DS_Store files found"
-            find . -name ".DS_Store"
-            exit 1
-          fi
-          echo "No .DS_Store files found"
 
       - name: Comment on PR if validation fails
         if: failure() && github.event_name == 'pull_request'
@@ -247,37 +45,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## Plugin Validation Failed
-
-            One or more checks failed. Please review the logs and fix the issues:
-
-            ### Version Consistency
-            If plugin files were modified, bump versions:
-            \`\`\`bash
-            ./scripts/bump-version.sh <plugin-name> patch
-            \`\`\`
-
-            ### JSON Syntax
-            Fix malformed JSON in the indicated files.
-
-            ### Plugin Structure
-            Each plugin needs:
-            - \`.claude-plugin/plugin.json\` manifest
-            - At least one of: \`skills/\`, \`commands/\`, or \`agents/\`
-
-            ### SKILL.md Frontmatter
-            Each SKILL.md needs YAML frontmatter with:
-            - \`name:\` field
-            - \`description:\` field
-
-            ### Symlinks
-            Ensure \`skills/\` symlinks point to valid targets.
-
-            ### Marketplace Registry
-            All plugins must be registered in \`.claude-plugin/marketplace.json\`.
-
-            Run locally to verify:
-            \`\`\`bash
-            ./scripts/validate-versions.sh
-            \`\`\``
-            })
+              body: '❌ **Marketplace validation failed.** Please run `./scripts/validate-marketplace.sh` locally to see details and fix issues before merging.'
+            });

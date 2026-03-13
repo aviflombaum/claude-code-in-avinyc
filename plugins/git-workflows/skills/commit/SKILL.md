@@ -1,5 +1,5 @@
 ---
-name: commit
+name: avinyc:commit
 description: This skill should be used when the user asks to "commit", "make a commit", "commit my changes", "create commits", "git commit", or wants to commit staged/unstaged changes with logical grouping and conventional commit format.
 user-invocable: true
 argument-hint: "[files or message]"

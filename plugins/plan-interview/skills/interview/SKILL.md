@@ -1,5 +1,5 @@
 ---
-name: interview
+name: avinyc:interview
 description: Interview about a plan file to refine it through in-depth questioning. Use when you have a plan that needs validation, refinement, or deeper exploration before implementation. Triggers on "interview me about", "refine this plan", "question this spec".
 argument-hint: "[path/to/plan.md]"
 user-invocable: true

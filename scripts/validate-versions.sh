@@ -1,13 +1,13 @@
 #!/bin/bash
-#
-# Validate plugin versions are consistent and bumped when needed
-#
-# Checks:
-# 1. All plugin.json versions match their marketplace.json entries
-# 2. If plugin files changed (vs base branch), version was bumped
-#
-# Usage: ./scripts/validate-versions.sh [base-branch]
-#   base-branch: Branch to compare against (default: main)
+# ============================================================================
+# Name:        validate-versions.sh
+# Version:     1.0.0
+# Description: Validate plugin versions are consistent and bumped when needed
+# Source:      claude-code-in-avinyc/scripts/validate-versions.sh
+# Usage:       ./scripts/validate-versions.sh [base-branch]
+# Requires:    bash 4+, git
+# Updated:     2026-03-13
+# ============================================================================
 
 set -e
 

@@ -1,5 +1,5 @@
 ---
-name: bootstrap
+name: avinyc:warp-bootstrap
 description: Bootstrap Warp terminal configuration for Rails projects. Creates launch configurations with colored tabs for dev server, Claude, shell, and more. This skill should be used when setting up Warp for a Rails project. Triggers on "setup warp", "configure warp", "warp rails", "warp bootstrap", "terminal setup for rails", "warp-rails".
 argument-hint: "[project-path]"
 user-invocable: true

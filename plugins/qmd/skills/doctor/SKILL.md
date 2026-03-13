@@ -1,5 +1,5 @@
 ---
-name: doctor
+name: avinyc:qmd-doctor
 description: Run qmd health check for this project. Triggers on "qmd doctor", "check qmd health", "qmd problems", "diagnose qmd".
 user-invocable: true
 allowed-tools: ["Bash", "Read", "Glob"]

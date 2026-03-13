@@ -1,5 +1,5 @@
 ---
-name: configure
+name: avinyc:qmd-configure
 description: Configure or reconfigure qmd collections for this project. Triggers on "configure qmd", "set up qmd", "reconfigure qmd", "qmd setup".
 user-invocable: true
 allowed-tools: ["Bash", "Read", "Write", "AskUserQuestion"]

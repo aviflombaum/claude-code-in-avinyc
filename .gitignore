@@ -6,3 +6,8 @@ plugins/test-plugin/
 node_modules/
 .claudelint-cache/
 bun.lock
+*.swp
+*.swo
+*~
+.env
+.env.local

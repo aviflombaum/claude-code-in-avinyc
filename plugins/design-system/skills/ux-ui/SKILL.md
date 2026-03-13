@@ -1,5 +1,5 @@
 ---
-name: ux-ui
+name: avinyc:ux-ui
 description: UX/UI design principles for clean, intuitive interfaces. Use when designing layouts, improving usability, planning information architecture, or ensuring accessibility. Triggers on "user experience", "usability", "information architecture", "accessibility", "interaction design".
 argument-hint: "[interface or flow]"
 user-invocable: true

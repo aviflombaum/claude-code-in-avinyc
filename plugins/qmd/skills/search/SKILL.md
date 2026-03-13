@@ -1,5 +1,5 @@
 ---
-name: search
+name: avinyc:qmd-search
 description: Search project documentation using qmd semantic search. Use BEFORE grepping/globbing indexed directories. Triggers on any task involving finding docs, plans, or other indexed markdown content.
 argument-hint: "<search query>"
 model: haiku

@@ -23,7 +23,7 @@ This installs all skills to your agent's skills directory.
 /plugin marketplace add aviflombaum/claude-code-in-avinyc
 
 # Or install individual plugins
-/plugin install rspec-writer@claude-code-in-avinyc
+/plugin install git-workflows@claude-code-in-avinyc
 ```
 
 ## Compatibility
@@ -48,15 +48,19 @@ CLAUDE.md                    # Symlink -> AGENTS.md
 skills/                      # Flat skill directory for npx add-skill
   analyze/                   # Symlink -> plugins/compound-analyzer/skills/analyze
   business/                  # Symlink -> plugins/saas-metrics/skills/business
-  hotwire/                   # Symlink -> plugins/rails-frontend/skills/hotwire
+  bootstrap/                 # Symlink -> plugins/warp-rails/skills/bootstrap
+  commit/                    # Symlink -> plugins/git-workflows/skills/commit
+  configure/                 # Symlink -> plugins/qmd/skills/configure
+  doctor/                    # Symlink -> plugins/qmd/skills/doctor
   interview/                 # Symlink -> plugins/plan-interview/skills/interview
   marketing/                 # Symlink -> plugins/saas-metrics/skills/marketing
-  rails/                     # Symlink -> plugins/rails-expert/skills/rails
-  tailwind/                  # Symlink -> plugins/rails-frontend/skills/tailwind
+  monitor-config/            # Symlink -> plugins/monitor-config/skills/monitor-config
+  rails-worktree/            # Symlink -> plugins/git-workflows/skills/rails-worktree
+  search/                    # Symlink -> plugins/qmd/skills/search
+  status/                    # Symlink -> plugins/qmd/skills/status
   ux-ui/                     # Symlink -> plugins/design-system/skills/ux-ui
   web-design/                # Symlink -> plugins/design-system/skills/web-design
   write/                     # Symlink -> plugins/tech-writer/skills/write
-  write-test/                # Symlink -> plugins/rspec-writer/skills/write-test
 
 .claude/
   hooks.json                 # Claude Code hooks (version bump reminders)
@@ -76,51 +80,50 @@ scripts/
   validate-versions.sh       # Validate version consistency
 
 plugins/
-  rspec-writer/
+  git-workflows/
     .claude-plugin/plugin.json
-    skills/write-test/SKILL.md    # /rspec:write-test
-    skills/write-test/patterns/   # Supporting reference files
-
-  rails-frontend/
-    .claude-plugin/plugin.json
-    skills/hotwire/SKILL.md       # /rails-frontend:hotwire
-    skills/tailwind/SKILL.md      # Auto-triggered (background knowledge)
-
-  rails-expert/
-    .claude-plugin/plugin.json
-    skills/rails/SKILL.md         # Auto-triggered (background knowledge)
+    skills/commit/SKILL.md          # /avinyc:commit
+    skills/rails-worktree/SKILL.md  # /avinyc:rails-worktree
 
   design-system/
     .claude-plugin/plugin.json
-    skills/web-design/SKILL.md    # /design-system:web-design
-    skills/ux-ui/SKILL.md         # Auto-triggered (background knowledge)
+    skills/web-design/SKILL.md      # /avinyc:web-design
+    skills/ux-ui/SKILL.md           # /avinyc:ux-ui
 
   saas-metrics/
     .claude-plugin/plugin.json
-    skills/business/SKILL.md      # /saas-metrics:business
-    skills/marketing/SKILL.md     # /saas-metrics:marketing
+    skills/business/SKILL.md        # /avinyc:business
+    skills/marketing/SKILL.md       # /avinyc:marketing
 
   tech-writer/
     .claude-plugin/plugin.json
-    skills/write/SKILL.md         # /tech-writer:write
+    skills/write/SKILL.md           # /avinyc:write
 
   compound-analyzer/
     .claude-plugin/plugin.json
-    skills/analyze/SKILL.md       # /compound-analyzer:analyze
+    skills/analyze/SKILL.md         # /avinyc:analyze
 
   plan-interview/
     .claude-plugin/plugin.json
-    skills/interview/SKILL.md     # /plan-interview:interview
+    skills/interview/SKILL.md       # /avinyc:interview
 
   qmd/
     .claude-plugin/plugin.json
-    skills/search/SKILL.md        # /qmd:search
-    skills/configure/SKILL.md     # /qmd:configure
-    skills/doctor/SKILL.md        # /qmd:doctor
-    skills/status/SKILL.md        # /qmd:status
-    hooks/hooks.json              # Guard hook for qmd-first workflow
+    skills/search/SKILL.md          # /avinyc:qmd-search
+    skills/configure/SKILL.md       # /avinyc:qmd-configure
+    skills/doctor/SKILL.md          # /avinyc:qmd-doctor
+    skills/status/SKILL.md          # /avinyc:qmd-status
+    hooks/hooks.json                # Guard hook for qmd-first workflow
     hooks/guard-qmd-search.sh
-    scripts/                      # Utility scripts (doctor, git hook, etc.)
+    scripts/                        # Utility scripts
+
+  warp-rails/
+    .claude-plugin/plugin.json
+    skills/bootstrap/SKILL.md       # /avinyc:warp-bootstrap
+
+  monitor-config/
+    .claude-plugin/plugin.json
+    skills/monitor-config/SKILL.md  # /avinyc:monitor-config
 ```
 
 ## Plugin Architecture
@@ -141,9 +144,8 @@ Skills fall into two categories based on their frontmatter:
 
 | Type | Frontmatter | `/` menu | Auto-triggered | Example |
 |------|-------------|----------|----------------|---------|
-| **Action** | (defaults) | Yes | Yes | `write-test`, `search`, `analyze` |
-| **Action (user-only)** | `disable-model-invocation: true` | Yes | No | Skills with side effects |
-| **Background knowledge** | `user-invocable: false` | No | Yes | `rails`, `tailwind`, `ux-ui` |
+| **Action** | (defaults) | Yes | Yes | `avinyc:commit`, `avinyc:qmd-search`, `avinyc:analyze` |
+| **Action (user-only)** | `disable-model-invocation: true` | Yes | No | `avinyc:warp-bootstrap`, `avinyc:monitor-config` |
 
 ### Skill Definition
 
@@ -206,17 +208,15 @@ Additional optional fields: `homepage`, `repository`, `license`, `commands`, `ag
 
 | Plugin | Skills | Purpose |
 |--------|--------|---------|
-| rspec-writer | write-test | Generate RSpec tests |
-| rails-frontend | hotwire, tailwind* | Turbo, Stimulus, Tailwind |
-| rails-expert | rails* | POODR and Refactoring Ruby |
-| design-system | web-design, ux-ui* | Visual design and usability |
-| saas-metrics | business, marketing | LTV, CAC, funnels |
-| tech-writer | write | Blog posts, tutorials |
-| compound-analyzer | analyze | Automation opportunities |
-| plan-interview | interview | Socratic questioning |
-| qmd | search, configure, doctor, status | Semantic search for project docs |
-
-\* = background knowledge skill (`user-invocable: false`), auto-triggered only.
+| git-workflows | avinyc:commit, avinyc:rails-worktree | Git commits and worktrees |
+| design-system | avinyc:web-design, avinyc:ux-ui | Visual design and usability |
+| saas-metrics | avinyc:business, avinyc:marketing | LTV, CAC, funnels |
+| tech-writer | avinyc:write | Blog posts, tutorials |
+| compound-analyzer | avinyc:analyze | Automation opportunities |
+| plan-interview | avinyc:interview | Socratic questioning |
+| qmd | avinyc:qmd-search, avinyc:qmd-configure, avinyc:qmd-doctor, avinyc:qmd-status | Semantic search for project docs |
+| warp-rails | avinyc:warp-bootstrap | Bootstrap Warp terminal for Rails |
+| monitor-config | avinyc:monitor-config | Optimize multi-monitor setups |
 
 ## Adding New Plugins
 
@@ -326,9 +326,9 @@ Three layers ensure version bumps never get forgotten:
 ./scripts/bump-version.sh <plugin-name> <bump-type>
 
 # Examples:
-./scripts/bump-version.sh rspec-writer patch   # 1.2.0 -> 1.2.1
-./scripts/bump-version.sh design-system minor  # 1.2.0 -> 1.3.0
-./scripts/bump-version.sh rails-expert major   # 1.1.0 -> 2.0.0
+./scripts/bump-version.sh git-workflows patch   # 1.5.0 -> 1.5.1
+./scripts/bump-version.sh design-system minor   # 1.4.0 -> 1.5.0
+./scripts/bump-version.sh qmd major             # 1.7.0 -> 2.0.0
 ```
 Updates both `plugin.json` and `marketplace.json` atomically.
 

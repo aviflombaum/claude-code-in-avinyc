@@ -1,5 +1,5 @@
 ---
-name: status
+name: avinyc:qmd-status
 description: Show qmd configuration and index status for this project. Triggers on "qmd status", "show qmd config", "qmd collections".
 user-invocable: true
 allowed-tools: ["Bash", "Read"]

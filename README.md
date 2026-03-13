@@ -3,9 +3,8 @@
 A curated collection of AI agent skills for Ruby, Rails, and SaaS development.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Plugins](https://img.shields.io/badge/plugins-10-brightgreen.svg)](#available-plugins)
-[![Skills](https://img.shields.io/badge/skills-14-green.svg)](#available-plugins)
-[![Commands](https://img.shields.io/badge/commands-10-orange.svg)](#available-plugins)
+[![Plugins](https://img.shields.io/badge/plugins-9-brightgreen.svg)](#available-plugins)
+[![Skills](https://img.shields.io/badge/skills-15-green.svg)](#available-plugins)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blueviolet.svg)](https://agentskills.io)
 
 ---
@@ -25,14 +24,13 @@ npx add-skill aviflombaum/claude-code-in-avinyc
 /plugin marketplace add aviflombaum/claude-code-in-avinyc
 
 # Or install individual plugins
-/plugin install rspec-writer@claude-code-in-avinyc
-/plugin install rails-frontend@claude-code-in-avinyc
-/plugin install rails-expert@claude-code-in-avinyc
+/plugin install git-workflows@claude-code-in-avinyc
 /plugin install design-system@claude-code-in-avinyc
 /plugin install saas-metrics@claude-code-in-avinyc
 /plugin install tech-writer@claude-code-in-avinyc
 /plugin install compound-analyzer@claude-code-in-avinyc
 /plugin install plan-interview@claude-code-in-avinyc
+/plugin install qmd@claude-code-in-avinyc
 /plugin install warp-rails@claude-code-in-avinyc
 /plugin install monitor-config@claude-code-in-avinyc
 ```
@@ -41,99 +39,79 @@ npx add-skill aviflombaum/claude-code-in-avinyc
 
 ## Available Plugins
 
-### 🛤️ Rails Development
+### 🛤️ Development Tools
 
-| Plugin | "/" Commands | Auto-triggered Skills | Description |
-|--------|--------------|----------------------|-------------|
-| [**rspec-writer**](plugins/rspec-writer/README.md) | `/rspec:write-test` | write-test | Generate comprehensive RSpec tests |
-| [**rails-frontend**](plugins/rails-frontend/README.md) | `/hotwire` | hotwire, tailwind | Turbo, Stimulus, and Tailwind |
-| [**rails-expert**](plugins/rails-expert/README.md) | — | rails | POODR and Refactoring Ruby |
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| [**git-workflows**](plugins/git-workflows/) | `/avinyc:commit`, `/avinyc:rails-worktree` | Git commits and worktrees |
+| [**qmd**](plugins/qmd/) | `/avinyc:qmd-search`, `/avinyc:qmd-configure`, `/avinyc:qmd-doctor`, `/avinyc:qmd-status` | Semantic search for project docs |
 
 ### 🎨 Design & UX
 
-| Plugin | "/" Commands | Auto-triggered Skills | Description |
-|--------|--------------|----------------------|-------------|
-| [**design-system**](plugins/design-system/README.md) | `/avinyc:web-design` | web-design, ux-ui | Visual design and usability |
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| [**design-system**](plugins/design-system/) | `/avinyc:web-design`, `avinyc:ux-ui` (auto) | Visual design and usability |
 
 ### 📊 Business & Writing
 
-| Plugin | "/" Commands | Auto-triggered Skills | Description |
-|--------|--------------|----------------------|-------------|
-| [**saas-metrics**](plugins/saas-metrics/README.md) | `/saas:business`, `/saas:marketing` | business, marketing | LTV, CAC, funnels |
-| [**tech-writer**](plugins/tech-writer/README.md) | `/avinyc:write` | write | Blog posts and tutorials |
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| [**saas-metrics**](plugins/saas-metrics/) | `/avinyc:business`, `/avinyc:marketing` | LTV, CAC, funnels |
+| [**tech-writer**](plugins/tech-writer/) | `/avinyc:write` | Blog posts and tutorials |
 
 ### ⚡ Productivity
 
-| Plugin | "/" Commands | Auto-triggered Skills | Description |
-|--------|--------------|----------------------|-------------|
-| [**compound-analyzer**](plugins/compound-analyzer/README.md) | `/compound:analyze` | analyze | Find automation opportunities |
-| [**plan-interview**](plugins/plan-interview/README.md) | `/avinyc:interview` | interview | Socratic plan refinement |
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| [**compound-analyzer**](plugins/compound-analyzer/) | `/avinyc:analyze` | Find automation opportunities |
+| [**plan-interview**](plugins/plan-interview/) | `/avinyc:interview` | Socratic plan refinement |
 
-### 🖥️ Developer Tools
+### 🖥️ System & Terminal
 
-| Plugin | "/" Commands | Auto-triggered Skills | Description |
-|--------|--------------|----------------------|-------------|
-| [**warp-rails**](plugins/warp-rails/README.md) | `/warp-rails` | bootstrap | Bootstrap Warp terminal for Rails |
-| [**monitor-config**](plugins/monitor-config/README.md) | `/avinyc:monitor-config` | monitor-config | Optimize multi-monitor setups |
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| [**warp-rails**](plugins/warp-rails/) | `/avinyc:warp-bootstrap` | Bootstrap Warp terminal for Rails |
+| [**monitor-config**](plugins/monitor-config/) | `/avinyc:monitor-config` | Optimize multi-monitor setups |
 
 ---
 
 ## Plugin Details
 
-### rspec-writer
+### git-workflows
 
-Generate comprehensive RSpec tests for Rails applications.
+Git commit assistant and worktree management for Rails projects.
 
 ```bash
-# Write tests for a model
-/rspec:write-test model User
+# Create logical commits
+/avinyc:commit
 
-# Or describe what you need
-"Write request specs for the Posts controller"
+# Create an isolated worktree
+/avinyc:rails-worktree feature-branch
 ```
 
-**Supports:** Model specs, request specs, system specs, job specs, mailer specs, channel specs, ActiveStorage specs
+**`/avinyc:commit`:** Analyzes git changes and creates logical, well-structured commits using conventional commit format.
 
-**Conventions:**
-- Uses fixtures, not factories
-- Modern `expect().to` syntax only
-- Runs with `--fail-fast` flag
+**`/avinyc:rails-worktree`:** Creates git worktrees with automatic Rails credential symlinking (master.key, environment keys).
 
 ---
 
-### rails-frontend
+### qmd
 
-Modern Rails frontend development with Hotwire and Tailwind.
-
-```bash
-# Create a Stimulus controller
-/hotwire controller dropdown toggle
-
-# Tailwind knowledge auto-triggers when styling
-"Style this card with shadow and hover state"
-```
-
-**`/hotwire` command:** Turbo Frames, Turbo Streams, Stimulus controllers, morphing, broadcasts
-
-**`tailwind` skill (auto-triggered):** Utility patterns, responsive design, component styling, animations
-
----
-
-### rails-expert
-
-Ruby and Rails best practices from the books that matter.
+Semantic search and management for project documentation using qmd.
 
 ```bash
-# Rails knowledge auto-triggers when discussing Rails
-"What's the best practice for service objects?"
+# Search project docs
+/avinyc:qmd-search how does authentication work
+
+# Configure collections
+/avinyc:qmd-configure
+
+# Health check
+/avinyc:qmd-doctor
+
+# Show status
+/avinyc:qmd-status
 ```
-
-**`rails` skill (auto-triggered):** Applies POODR and Refactoring Ruby principles automatically when discussing Rails code.
-
-**References:**
-- Practical Object Oriented Design in Ruby (POODR) by Sandi Metz
-- Refactoring: Ruby Edition by Martin Fowler
-- Everyday Rails Testing with RSpec
 
 ---
 
@@ -149,9 +127,9 @@ UI/UX design expertise for building beautiful, usable interfaces.
 "What's the best information architecture for a settings page?"
 ```
 
-**`/avinyc:web-design` command:** Visual hierarchy, typography, color theory, layout systems, design aesthetics (Bauhaus, Retro, Futuristic)
+**`/avinyc:web-design`:** Visual hierarchy, typography, color theory, layout systems, design aesthetics (Bauhaus, Retro, Futuristic)
 
-**`ux-ui` skill (auto-triggered):** Usability principles, accessibility, interaction design, information architecture
+**`avinyc:ux-ui` (auto-triggered):** Usability principles, accessibility, interaction design, information architecture
 
 ---
 
@@ -161,15 +139,15 @@ SaaS business metrics for founders building products.
 
 ```bash
 # Analyze unit economics
-/saas:business calculate LTV:CAC ratio
+/avinyc:business calculate LTV:CAC ratio
 
 # Model a marketing funnel
-/saas:marketing ad spend to conversion analysis
+/avinyc:marketing ad spend to conversion analysis
 ```
 
-**Business skill:** LTV, CAC, MRR/ARR, churn analysis, payback period, Rule of 40
+**`/avinyc:business`:** LTV, CAC, MRR/ARR, churn analysis, payback period, Rule of 40
 
-**Marketing skill:** CPM, CPC, conversion funnels, landing page optimization, waitlist economics
+**`/avinyc:marketing`:** CPM, CPC, conversion funnels, landing page optimization, waitlist economics
 
 ---
 
@@ -195,7 +173,7 @@ Identify automation and systematization opportunities in your development work.
 
 ```bash
 # Analyze completed work
-/compound:analyze
+/avinyc:analyze
 
 # Or describe what to review
 "Analyze this feature for automation opportunities"
@@ -224,7 +202,7 @@ Bootstrap Warp terminal configuration for Rails projects with colored tabs.
 
 ```bash
 # Set up Warp for current project
-/warp-rails
+/avinyc:warp-bootstrap
 ```
 
 **Creates launch config with tabs:**
@@ -262,23 +240,6 @@ Configure and optimize multi-monitor setups on macOS using displayplacer.
 
 ---
 
-## Architecture: Commands vs Skills
-
-This marketplace uses both **commands** and **skills**:
-
-| Type | "/" Autocomplete | Auto-detection | When to Use |
-|------|-----------------|----------------|-------------|
-| **Command + Skill** | ✓ | ✓ | Action-oriented features |
-| **Skill only** | — | ✓ | Contextual knowledge |
-
-**Commands** (`/command-name`): Appear in "/" autocomplete. Use for explicit actions like `/rspec:write-test` or `/compound:analyze`.
-
-**Skills** (auto-triggered): Loaded based on conversation context. Use for contextual knowledge like `rails`, `tailwind`, or `ux-ui`.
-
-**Pattern:** Action-oriented features get both. Contextual knowledge gets skills only.
-
----
-
 ## Local Development
 
 Test plugin changes locally before pushing:
@@ -303,19 +264,9 @@ This configures Claude Code to load plugins from your local directory instead of
 3. Create your plugin in `plugins/<plugin-name>/`
 4. Add `.claude-plugin/plugin.json` manifest
 5. Add skills under `skills/<skill-name>/SKILL.md`
-6. For action-oriented skills, add a command wrapper in `commands/<command-name>.md`:
-   ```markdown
-   ---
-   name: command-name
-   description: Brief description
-   argument-hint: "[args]"
-   ---
-
-   Invoke the plugin-name:skill-name skill for: $ARGUMENTS
-   ```
-7. Register in `.claude-plugin/marketplace.json`
-8. **Bump version** with `./scripts/bump-version.sh <plugin-name> patch` (required for updates to propagate)
-9. Submit a pull request
+6. Register in `.claude-plugin/marketplace.json`
+7. **Bump version** with `./scripts/bump-version.sh <plugin-name> patch` (required for updates to propagate)
+8. Submit a pull request
 
 ---
 

@@ -1,13 +1,13 @@
 #!/bin/bash
-#
-# Bump plugin version in both plugin.json and marketplace.json
-#
-# Usage: ./scripts/bump-version.sh <plugin-name> <bump-type>
-#   bump-type: patch (1.0.0 -> 1.0.1)
-#              minor (1.0.0 -> 1.1.0)
-#              major (1.0.0 -> 2.0.0)
-#
-# Example: ./scripts/bump-version.sh rspec-writer patch
+# ============================================================================
+# Name:        bump-version.sh
+# Version:     1.0.0
+# Description: Bump plugin version in both plugin.json and marketplace.json
+# Source:      claude-code-in-avinyc/scripts/bump-version.sh
+# Usage:       ./scripts/bump-version.sh <plugin-name> <bump-type>
+# Requires:    bash 4+, perl, sed
+# Updated:     2026-03-13
+# ============================================================================
 
 set -e
 
@@ -27,13 +27,16 @@ usage() {
     echo "Usage: $0 <plugin-name> <bump-type>"
     echo ""
     echo "Arguments:"
-    echo "  plugin-name  Name of the plugin (e.g., rspec-writer, design-system)"
+    echo "  plugin-name  Name of the plugin directory in plugins/"
     echo "  bump-type    Type of version bump: patch, minor, or major"
     echo ""
-    echo "Examples:"
-    echo "  $0 rspec-writer patch    # 1.2.0 -> 1.2.1"
-    echo "  $0 design-system minor   # 1.2.0 -> 1.3.0"
-    echo "  $0 rails-expert major    # 1.1.0 -> 2.0.0"
+    echo "Examples (using first available plugin):"
+    first_plugin=$(ls -1 "$ROOT_DIR/plugins" 2>/dev/null | head -1)
+    if [ -n "$first_plugin" ]; then
+        echo "  $0 $first_plugin patch    # 1.2.0 -> 1.2.1"
+        echo "  $0 $first_plugin minor    # 1.2.0 -> 1.3.0"
+        echo "  $0 $first_plugin major    # 1.1.0 -> 2.0.0"
+    fi
     echo ""
     echo "Available plugins:"
     ls -1 "$ROOT_DIR/plugins" 2>/dev/null | sed 's/^/  /'

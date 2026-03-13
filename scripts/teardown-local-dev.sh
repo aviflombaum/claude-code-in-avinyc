@@ -1,25 +1,40 @@
 #!/bin/bash
-#
-# Revert Claude Code to load this marketplace from GitHub instead of local directory
-#
-# This script:
-# 1. Updates ~/.claude/plugins/known_marketplaces.json to use GitHub source
-#
-# Usage: ./scripts/teardown-local-dev.sh
-#
+# ============================================================================
+# Name:        teardown-local-dev.sh
+# Version:     1.0.0
+# Description: Revert marketplace to load from GitHub instead of local directory
+# Source:      claude-code-in-avinyc/scripts/teardown-local-dev.sh
+# Usage:       ./scripts/teardown-local-dev.sh [marketplace-name] [github-repo]
+# Requires:    bash 4+, node
+# Updated:     2026-03-13
+# ============================================================================
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
-MARKETPLACE_NAME="claude-code-in-avinyc"
-GITHUB_REPO="aviflombaum/claude-code-in-avinyc"
-KNOWN_MARKETPLACES="$HOME/.claude/plugins/known_marketplaces.json"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
+
+# Auto-detect or use args
+if [ -n "$1" ]; then
+    MARKETPLACE_NAME="$1"
+else
+    MARKETPLACE_NAME=$(node -e "const d=require('$ROOT_DIR/.claude-plugin/marketplace.json');console.log(d.name)" 2>/dev/null || grep -o '"name": *"[^"]*"' "$ROOT_DIR/.claude-plugin/marketplace.json" | head -1 | sed 's/"name": *"\([^"]*\)"/\1/')
+fi
+GITHUB_REPO="${2:-}"
+if [ -z "$GITHUB_REPO" ]; then
+    # Try to detect from git remote
+    GITHUB_REPO=$(cd "$ROOT_DIR" && git remote get-url origin 2>/dev/null | sed 's|.*github.com[:/]||;s|\.git$||' || echo "")
+fi
+if [ -z "$GITHUB_REPO" ]; then
+    echo -e "${RED}Error: Cannot detect GitHub repo. Pass as second argument.${NC}"
+    exit 1
+fi
+KNOWN_MARKETPLACES="$HOME/.claude/plugins/known_marketplaces.json"
 
 echo "Reverting to GitHub source for $MARKETPLACE_NAME..."
 echo ""

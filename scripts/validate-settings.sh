@@ -1,20 +1,24 @@
 #!/bin/bash
-#
-# LOCAL DEVELOPMENT ONLY - Not run in CI
-#
-# Validate settings.local.json has all plugins enabled for local testing.
-# This file (.claude/settings.local.json) is gitignored and not available in CI.
-#
-# Checks that every plugin in marketplace.json has a corresponding
-# entry in .claude/settings.local.json enabledPlugins
-#
-# Usage: ./scripts/validate-settings.sh
+# ============================================================================
+# Name:        validate-settings.sh
+# Version:     1.0.0
+# Description: Validate settings.local.json has all plugins enabled for local testing
+# Source:      claude-code-in-avinyc/scripts/validate-settings.sh
+# Usage:       ./scripts/validate-settings.sh [marketplace-name]
+# Requires:    bash 4+, node (python3 fallback)
+# Updated:     2026-03-13
+# ============================================================================
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
-MARKETPLACE_NAME="claude-code-in-avinyc"
+# Auto-detect marketplace name from marketplace.json, or use $1
+if [ -n "$1" ]; then
+    MARKETPLACE_NAME="$1"
+else
+    MARKETPLACE_NAME=$(node -e "const d=require('$ROOT_DIR/.claude-plugin/marketplace.json');console.log(d.name)" 2>/dev/null || grep -o '"name": *"[^"]*"' "$ROOT_DIR/.claude-plugin/marketplace.json" | head -1 | sed 's/"name": *"\([^"]*\)"/\1/')
+fi
 MARKETPLACE_JSON="$ROOT_DIR/.claude-plugin/marketplace.json"
 LOCAL_SETTINGS="$ROOT_DIR/.claude/settings.local.json"
 

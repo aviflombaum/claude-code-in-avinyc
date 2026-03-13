@@ -1,7 +1,7 @@
 {
   "name": "monitor-config",
   "description": "Configure and optimize multi-monitor setups on macOS using displayplacer",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "author": {
     "name": "Avi Flombaum",
     "email": "im@avi.nyc"

@@ -1,5 +1,5 @@
 ---
-name: monitor-config
+name: avinyc:monitor-config
 description: This skill should be used when the user asks to configure, optimize, or troubleshoot their display/monitor setup. Triggers on "optimize my monitors", "configure displays", "rotate monitor", "set up my screens", "display settings", "monitor resolution", or any request to adjust multi-monitor arrangements, resolutions, refresh rates, or orientations on macOS.
 user-invocable: true
 argument-hint: "[describe your setup or issue]"
