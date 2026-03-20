@@ -28,20 +28,26 @@ Then STOP.
 The search skill uses qmd's MCP tools for best performance (models stay warm between queries). Check if the MCP server is configured:
 
 ```bash
-cat ~/.claude/settings.json 2>/dev/null | grep -q '"qmd"' && echo "found in global" || echo "not in global"
-cat .claude/settings.local.json 2>/dev/null | grep -q '"qmd"' && echo "found in local" || echo "not in local"
+cat .mcp.json 2>/dev/null | grep -q '"qmd"' && echo "found in project" || echo "not in project"
 ```
 
-If not configured in either location, tell the user:
+If not configured, tell the user:
 
-> qmd MCP server is not configured. Add it to your Claude Code settings for the best search experience.
+> qmd MCP server is not configured. Add it for the best search experience.
 >
-> Add this to `~/.claude/settings.json` (global) or `.claude/settings.local.json` (project):
+> **Option 1 — CLI (recommended):**
+> ```bash
+> claude mcp add qmd -- qmd mcp
+> ```
 >
+> **Option 2 — Manual:** Add to `.mcp.json` in the project root:
 > ```json
 > {
 >   "mcpServers": {
->     "qmd": { "command": "qmd", "args": ["mcp"] }
+>     "qmd": {
+>       "command": "qmd",
+>       "args": ["mcp"]
+>     }
 >   }
 > }
 > ```

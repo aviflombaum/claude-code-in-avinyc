@@ -86,12 +86,21 @@ Collection naming convention: `{project}_{type}` with underscores. All collectio
 
 ## MCP Setup
 
-For best performance, configure qmd's MCP server in your Claude Code settings:
+For best performance, configure qmd's MCP server:
 
+**Option 1 — CLI (recommended):**
+```bash
+claude mcp add qmd -- qmd mcp
+```
+
+**Option 2 — Manual:** Add to `.mcp.json` in the project root:
 ```json
 {
   "mcpServers": {
-    "qmd": { "command": "qmd", "args": ["mcp"] }
+    "qmd": {
+      "command": "qmd",
+      "args": ["mcp"]
+    }
   }
 }
 ```

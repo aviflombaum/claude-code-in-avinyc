@@ -113,7 +113,7 @@ If MCP tools fail, diagnose the issue:
 
 | Error | Likely cause | Fix |
 |-------|-------------|-----|
-| `mcp__qmd__query` not available | MCP server not configured | Add `"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}` to Claude Code settings. Run `/avinyc:qmd-configure`. |
+| `mcp__qmd__query` not available | MCP server not configured | Run `claude mcp add qmd -- qmd mcp` or add qmd to `.mcp.json`. Run `/avinyc:qmd-configure`. |
 | MCP call returns error | Server not running or crashed | Run `qmd mcp` to verify. Check `qmd status`. |
 | Collection not found | Config out of sync | Run `/avinyc:qmd-doctor` to diagnose. |
 | No results | Index empty or stale | Run `qmd update && qmd embed` to rebuild. |

@@ -38,4 +38,4 @@ Display the live status alongside the project config. Key things to highlight:
 
 Report whether MCP tools are available. If not, suggest:
 
-> MCP server not configured. Add `"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}` to your Claude Code settings for faster searches.
+> MCP server not configured. Run `claude mcp add qmd -- qmd mcp` or add qmd to `.mcp.json` for faster searches.

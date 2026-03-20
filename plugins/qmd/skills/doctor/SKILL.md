@@ -22,7 +22,7 @@ For any failure, suggest the appropriate fix:
 | Collection naming mismatch | Run `/avinyc:qmd-configure` to rename |
 | Git hook missing/wrong marker | Run `/avinyc:qmd-configure` and re-enable git hook |
 | Git hook has old --index flag | Run `/avinyc:qmd-configure` and re-enable git hook |
-| MCP server not responding | Add `"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}` to settings |
+| MCP server not responding | Run `claude mcp add qmd -- qmd mcp` or add qmd to `.mcp.json` |
 | YAML config missing collection | Run `/avinyc:qmd-configure` |
 
 ## Checks
@@ -97,7 +97,7 @@ grep -F "{collection_name}:" "$HOME/.config/qmd/index.yml"
 
 Try calling `mcp__qmd__status`. If it returns data, `[PASS]`. If the tool is not available or returns an error, `[WARN]` with message:
 
-> MCP server not configured or not responding. Search will fall back to CLI. Add `"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}` to your Claude Code settings.
+> MCP server not configured or not responding. Search will fall back to CLI. Run `claude mcp add qmd -- qmd mcp` or add qmd to `.mcp.json`.
 
 ## Output Format
 
