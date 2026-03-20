@@ -1,119 +1,133 @@
 ---
 name: avinyc:qmd-search
-description: Search project documentation using qmd semantic search. Use BEFORE grepping/globbing indexed directories. Triggers on any task involving finding docs, plans, or other indexed markdown content.
+description: Search project documentation using qmd semantic search. Invoke with /avinyc:qmd-search <query> to find docs, plans, or indexed markdown content in your project.
 argument-hint: "<search query>"
-model: haiku
-context: fork
 ---
 
-# QMD Search — Retrieval Agent
+# <span data-proof="authored" data-by="ai:claude">QMD Search</span>
 
-You are a **retrieval agent** running as a subagent. Your job is to find relevant documents via qmd semantic search and return their contents. The main conversation thread will synthesize your results in the user's context.
+<span data-proof="authored" data-by="ai:claude">Search your project's indexed markdown documentation using qmd's MCP tools. This skill reads your project's qmd configuration to know which collections to search, constructs structured queries, and retrieves relevant documents.</span>
 
-**Scope:** Only search qmd and read the documents it finds. Do not explore the codebase beyond qmd results — no searching for source files, no running `find` or `ls` on project directories, no reading files that weren't returned by qmd. If qmd doesn't find it, it's not your job.
+## <span data-proof="authored" data-by="ai:claude">Step 1: Read Config</span>
 
-## STOP — Read Config First
+<span data-proof="authored" data-by="ai:claude">Read</span> <span data-proof="authored" data-by="ai:claude">`.claude/qmd.json`</span> <span data-proof="authored" data-by="ai:claude">from the project root.</span>
 
-1. Use the **Read tool** to read `.claude/qmd.json`. If missing, tell the user: "qmd is not configured for this project. Run `/qmd:configure` to set it up." Then STOP.
-2. Extract `project` name and `collections` (each has: name, path, pattern, description).
-3. Pick the best collection for the query (match against descriptions). If only one, use it.
+<span data-proof="authored" data-by="ai:claude">If missing, tell the user:</span>
 
-**Every qmd command MUST include `--json` and `-c <collection_name>`.** No exceptions.
+> <span data-proof="authored" data-by="ai:claude">qmd is not configured for this project. Run</span> <span data-proof="authored" data-by="ai:claude">`/avinyc:qmd-configure`</span> <span data-proof="authored" data-by="ai:claude">to set it up.</span>
 
-## Do NOT
+<span data-proof="authored" data-by="ai:claude">Then STOP.</span>
 
-- Run qmd without `--json` flag
-- Run qmd without `-c <collection>`
-- Use `npx` to run qmd — it is already installed
-- Use `qmd get` to read files — use the Read tool
-- Use the `--full` flag — it floods the context window
-- Skip reading `.claude/qmd.json` before searching
-- Search or read source code files (only read documents found by qmd)
-- Run `find`, `ls`, or `grep` on project directories
-- Explore beyond what qmd returns
+<span data-proof="authored" data-by="ai:claude">Extract</span> <span data-proof="authored" data-by="ai:claude">`project`</span> <span data-proof="authored" data-by="ai:claude">name and</span> <span data-proof="authored" data-by="ai:claude">`collections`</span> <span data-proof="authored" data-by="ai:claude">— each has a name, path, and description. Pick the best collection for the query by matching against descriptions. If only one collection exists, use it.</span>
 
-## Query Types
+## <span data-proof="authored" data-by="ai:claude">Step 2: Search via MCP</span>
 
-qmd provides three search commands. Pick the right one for the situation:
+<span data-proof="authored" data-by="ai:claude">Use the</span> <span data-proof="authored" data-by="ai:claude">`mcp__qmd__query`</span> <span data-proof="authored" data-by="ai:claude">tool with a structured query. This is the primary search method — it's faster than CLI (models stay warm between queries) and supports multi-type queries with intent disambiguation.</span>
 
-### `qmd search` — BM25 keyword search
+### <span data-proof="authored" data-by="ai:claude">Constructing the Query</span>
 
-Best when you know the exact terms or vocabulary used in the documents.
+<span data-proof="authored" data-by="ai:claude">Every search should include at least two query types for best recall. The first query gets</span> **<span data-proof="authored" data-by="ai:claude">2x weight</span>** <span data-proof="authored" data-by="ai:claude">in fusion scoring, so put your best guess first.</span>
 
-```bash
-qmd search "<query>" -c <collection> --json -n 5
+```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6MjA4LCJhdHRycyI6eyJieSI6ImFpOmNsYXVkZSJ9fV0=
+{
+  "searches": [
+    { "type": "lex", "query": "2-5 exact keywords, no filler" },
+    { "type": "vec", "query": "full natural language question" }
+  ],
+  "collections": ["<collection_name>"],
+  "limit": 10
+}
 ```
 
-**Query writing tips:**
-- Use 2-5 specific terms, no filler words
-- Use exact phrases with quotes: `qmd search "error handling" -c col --json -n 5`
-- Exclude terms with minus: `qmd search "auth -oauth" -c col --json -n 5`
-- Think about what words actually appear in the documents
+### <span data-proof="authored" data-by="ai:claude">Query Types</span>
 
-### `qmd vsearch` — Vector/semantic search
+| <span data-proof="authored" data-by="ai:claude">Type</span>   | <span data-proof="authored" data-by="ai:claude">Method</span>           | <span data-proof="authored" data-by="ai:claude">When to use</span>                               | <span data-proof="authored" data-by="ai:claude">Writing tips</span>                                                                                                                                                                                         |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <span data-proof="authored" data-by="ai:claude">`lex`</span>  | <span data-proof="authored" data-by="ai:claude">BM25 keyword</span>     | <span data-proof="authored" data-by="ai:claude">You know the exact terms in the docs</span>      | <span data-proof="authored" data-by="ai:claude">2-5 terms. Exact phrases:</span> <span data-proof="authored" data-by="ai:claude">`"rate limiter"`. Exclude:</span> <span data-proof="authored" data-by="ai:claude">`-sports`. Code identifiers work.</span> |
+| <span data-proof="authored" data-by="ai:claude">`vec`</span>  | <span data-proof="authored" data-by="ai:claude">Vector semantic</span>  | <span data-proof="authored" data-by="ai:claude">You don't know the vocabulary</span>             | <span data-proof="authored" data-by="ai:claude">Full question. Be specific: "how does the auth system handle session expiry?"</span>                                                                                                                        |
+| <span data-proof="authored" data-by="ai:claude">`hyde`</span> | <span data-proof="authored" data-by="ai:claude">Hypothetical doc</span> | <span data-proof="authored" data-by="ai:claude">Complex topic, you can imagine the answer</span> | <span data-proof="authored" data-by="ai:claude">Write 50-100 words of what the answer looks like, using vocabulary you expect in the result.</span>                                                                                                         |
 
-Best when you don't know the exact vocabulary or want conceptual matching.
+### <span data-proof="authored" data-by="ai:claude">When to Use What</span>
 
-```bash
-qmd vsearch "<query>" -c <collection> --json -n 5
+| <span data-proof="authored" data-by="ai:claude">Situation</span>                                                                    | <span data-proof="authored" data-by="ai:claude">Query types to include</span>                                                                                                                                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <span data-proof="authored" data-by="ai:claude">Know exact terms</span>                                                             | <span data-proof="authored" data-by="ai:claude">`lex`</span> <span data-proof="authored" data-by="ai:claude">only</span>                                                                                                                                                                                  |
+| <span data-proof="authored" data-by="ai:claude">Don't know vocabulary</span>                                                        | <span data-proof="authored" data-by="ai:claude">`vec`</span> <span data-proof="authored" data-by="ai:claude">only</span>                                                                                                                                                                                  |
+| <span data-proof="authored" data-by="ai:claude">Best recall</span>                                                                  | <span data-proof="authored" data-by="ai:claude">`lex`</span> <span data-proof="authored" data-by="ai:claude">+</span> <span data-proof="authored" data-by="ai:claude">`vec`</span>                                                                                                                        |
+| <span data-proof="authored" data-by="ai:claude">Complex or broad topic</span>                                                       | <span data-proof="authored" data-by="ai:claude">`lex`</span> <span data-proof="authored" data-by="ai:claude">+</span> <span data-proof="authored" data-by="ai:claude">`vec`</span> <span data-proof="authored" data-by="ai:claude">+</span> <span data-proof="authored" data-by="ai:claude">`hyde`</span> |
+| <span data-proof="authored" data-by="ai:claude">Ambiguous query (e.g., "performance" could mean web perf, team health, etc.)</span> | <span data-proof="authored" data-by="ai:claude">Any combination +</span> <span data-proof="authored" data-by="ai:claude">`intent`</span>                                                                                                                                                                  |
+
+### <span data-proof="authored" data-by="ai:claude">Intent Disambiguation</span>
+
+<span data-proof="authored" data-by="ai:claude">When a query term is ambiguous, add</span> <span data-proof="authored" data-by="ai:claude">`intent`</span> <span data-proof="authored" data-by="ai:claude">to steer all pipeline stages (expansion, reranking, snippet extraction):</span>
+
+```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6MjQwLCJhdHRycyI6eyJieSI6ImFpOmNsYXVkZSJ9fV0=
+{
+  "searches": [
+    { "type": "lex", "query": "performance" },
+    { "type": "vec", "query": "how to improve page load speed" }
+  ],
+  "intent": "web page load times and Core Web Vitals",
+  "collections": ["project_docs"],
+  "limit": 10
+}
 ```
 
-**Query writing tips:**
-- Write a full natural language question
-- Be specific about what you're looking for
-- Good: `"How does the authentication system handle session expiry?"`
-- Bad: `"auth sessions"`
+<span data-proof="authored" data-by="ai:claude">Intent does not search on its own — it's a steering signal that disambiguates what you mean.</span>
 
-### `qmd query` — Auto-expand + rerank (most powerful)
+## <span data-proof="authored" data-by="ai:claude">Step 3: Interpret Results</span>
 
-Best for complex topics. Automatically generates query variations and reranks results.
+<span data-proof="authored" data-by="ai:claude">Results include</span> <span data-proof="authored" data-by="ai:claude">`docid`,</span> <span data-proof="authored" data-by="ai:claude">`score`,</span> <span data-proof="authored" data-by="ai:claude">`file`,</span> <span data-proof="authored" data-by="ai:claude">`title`,</span> <span data-proof="authored" data-by="ai:claude">`context`, and</span> <span data-proof="authored" data-by="ai:claude">`snippet`.</span>
 
-```bash
-qmd query "<query>" -c <collection> --json -n 5
+| <span data-proof="authored" data-by="ai:claude">Score</span>            | <span data-proof="authored" data-by="ai:claude">Meaning</span>                              |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| **<span data-proof="authored" data-by="ai:claude">0.7+</span>**         | <span data-proof="authored" data-by="ai:claude">Highly relevant — read this document</span> |
+| **<span data-proof="authored" data-by="ai:claude">0.5–0.7</span>**      | <span data-proof="authored" data-by="ai:claude">Worth reading if topic matches</span>       |
+| **<span data-proof="authored" data-by="ai:claude">< 0.5 on all</span>** | <span data-proof="authored" data-by="ai:claude">Try different query types or refine</span>  |
+
+## <span data-proof="authored" data-by="ai:claude">Step 4: Retrieve Documents</span>
+
+<span data-proof="authored" data-by="ai:claude">To read a full document from the results, use</span> <span data-proof="authored" data-by="ai:claude">`mcp__qmd__get`:</span>
+
+```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6MjAsImF0dHJzIjp7ImJ5IjoiYWk6Y2xhdWRlIn19XQ==
+{ "path": "#docid" }
 ```
 
-**Query writing tips:**
-- Use for complex or multi-faceted topics
-- Write naturally — the system auto-generates search variations
-- Good for exploratory searches where you're not sure what you'll find
+<span data-proof="authored" data-by="ai:claude">Or by file path:</span>
 
-## Strategy
-
-| Situation | Use |
-|-----------|-----|
-| Know exact terms | `qmd search` |
-| Don't know vocabulary | `qmd vsearch` or `qmd query` |
-| Best recall needed | Try `search` first, `vsearch` if poor results |
-| Complex or broad topic | `qmd query` |
-
-## Reading Results
-
-JSON output contains an array:
-
-```json
-[
-  {
-    "docid": "#abc123",
-    "score": 0.74,
-    "file": "qmd://<collection>/path/to/file.md",
-    "title": "Document Title",
-    "context": "Collection description...",
-    "snippet": "..."
-  }
-]
+```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6NDUsImF0dHJzIjp7ImJ5IjoiYWk6Y2xhdWRlIn19XQ==
+{ "path": "collection_name/path/to/file.md" }
 ```
 
-**Score interpretation:**
-- **0.7+**: Highly relevant — read this document
-- **0.5-0.7**: Worth reading if topic matches
-- **< 0.5 on all results**: Try a different query type or refine your query
+<span data-proof="authored" data-by="ai:claude">For multiple related documents, use</span> <span data-proof="authored" data-by="ai:claude">`mcp__qmd__multi_get`</span> <span data-proof="authored" data-by="ai:claude">to batch retrieve:</span>
 
-**To read a result file:**
-1. Extract the file path from the `file` field
-2. Strip the `qmd://<collection>/` prefix
-3. Prepend the collection's `path` from config to get the repo-relative path
-4. Use the **Read tool** to read the file
+```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6NDIsImF0dHJzIjp7ImJ5IjoiYWk6Y2xhdWRlIn19XQ==
+{ "pattern": "collection_name/docs/*.md" }
+```
 
-## Fallback
+<span data-proof="authored" data-by="ai:claude">This is faster than reading files one at a time.</span>
 
-After poor results from 2 query types or 2 retries with refined queries, fall back to Glob/Grep on the directory. Default `-n 5` (use `3` for narrow queries, `10` for broad).
+## <span data-proof="authored" data-by="ai:claude">Error Handling</span>
+
+<span data-proof="authored" data-by="ai:claude">If MCP tools fail, diagnose the issue:</span>
+
+| <span data-proof="authored" data-by="ai:claude">Error</span>                                                                                  | <span data-proof="authored" data-by="ai:claude">Likely cause</span>                  | <span data-proof="authored" data-by="ai:claude">Fix</span>                                                                                                                                                                                                                                                                                         |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <span data-proof="authored" data-by="ai:claude">`mcp__qmd__query`</span> <span data-proof="authored" data-by="ai:claude">not available</span> | <span data-proof="authored" data-by="ai:claude">MCP server not configured</span>     | <span data-proof="authored" data-by="ai:claude">Add</span> <span data-proof="authored" data-by="ai:claude">`"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}`</span> <span data-proof="authored" data-by="ai:claude">to Claude Code settings. Run</span> <span data-proof="authored" data-by="ai:claude">`/avinyc:qmd-configure`.</span> |
+| <span data-proof="authored" data-by="ai:claude">MCP call returns error</span>                                                                 | <span data-proof="authored" data-by="ai:claude">Server not running or crashed</span> | <span data-proof="authored" data-by="ai:claude">Run</span> <span data-proof="authored" data-by="ai:claude">`qmd mcp`</span> <span data-proof="authored" data-by="ai:claude">to verify. Check</span> <span data-proof="authored" data-by="ai:claude">`qmd status`.</span>                                                                           |
+| <span data-proof="authored" data-by="ai:claude">Collection not found</span>                                                                   | <span data-proof="authored" data-by="ai:claude">Config out of sync</span>            | <span data-proof="authored" data-by="ai:claude">Run</span> <span data-proof="authored" data-by="ai:claude">`/avinyc:qmd-doctor`</span> <span data-proof="authored" data-by="ai:claude">to diagnose.</span>                                                                                                                                         |
+| <span data-proof="authored" data-by="ai:claude">No results</span>                                                                             | <span data-proof="authored" data-by="ai:claude">Index empty or stale</span>          | <span data-proof="authored" data-by="ai:claude">Run</span> <span data-proof="authored" data-by="ai:claude">`qmd update && qmd embed`</span> <span data-proof="authored" data-by="ai:claude">to rebuild.</span>                                                                                                                                     |
+
+## <span data-proof="authored" data-by="ai:claude">CLI Fallback</span>
+
+<span data-proof="authored" data-by="ai:claude">If MCP tools are unavailable, fall back to the CLI. The</span> <span data-proof="authored" data-by="ai:claude">`qmd query`</span> <span data-proof="authored" data-by="ai:claude">command supports structured queries via multiline strings:</span>
+
+```bash proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6MTAzLCJhdHRycyI6eyJieSI6ImFpOmNsYXVkZSJ9fV0=
+qmd query $'lex: exact keywords here\nvec: natural language question here' -c <collection> --json -n 10
+```
+
+<span data-proof="authored" data-by="ai:claude">This single command subsumes</span> <span data-proof="authored" data-by="ai:claude">`qmd search`</span> <span data-proof="authored" data-by="ai:claude">(BM25 only) and</span> <span data-proof="authored" data-by="ai:claude">`qmd vsearch`</span> <span data-proof="authored" data-by="ai:claude">(vector only). Always use</span> <span data-proof="authored" data-by="ai:claude">`--json`</span> <span data-proof="authored" data-by="ai:claude">for parseable output.</span>
+
+## <span data-proof="authored" data-by="ai:claude">Fallback to Glob/Grep</span>
+
+<span data-proof="authored" data-by="ai:claude">After 2 poor query attempts (different query types, refined terms), fall back to Glob/Grep on the collection's directory path from config. qmd can't find everything — sometimes a direct file search is faster.</span>
