@@ -4,31 +4,31 @@ description: Search project documentation using qmd semantic search. Invoke with
 argument-hint: "<search query>"
 ---
 
-# <span data-proof="authored" data-by="ai:claude">QMD Search</span>
+# QMD Search
 
-<span data-proof="authored" data-by="ai:claude">Search your project's indexed markdown documentation using qmd's MCP tools. This skill reads your project's qmd configuration to know which collections to search, constructs structured queries, and retrieves relevant documents.</span>
+Search your project's indexed markdown documentation using qmd's MCP tools. This skill reads your project's qmd configuration to know which collections to search, constructs structured queries, and retrieves relevant documents.
 
-## <span data-proof="authored" data-by="ai:claude">Step 1: Read Config</span>
+## Step 1: Read Config
 
-<span data-proof="authored" data-by="ai:claude">Read</span> <span data-proof="authored" data-by="ai:claude">`.claude/qmd.json`</span> <span data-proof="authored" data-by="ai:claude">from the project root.</span>
+Read `.claude/qmd.json` from the project root.
 
-<span data-proof="authored" data-by="ai:claude">If missing, tell the user:</span>
+If missing, tell the user:
 
-> <span data-proof="authored" data-by="ai:claude">qmd is not configured for this project. Run</span> <span data-proof="authored" data-by="ai:claude">`/avinyc:qmd-configure`</span> <span data-proof="authored" data-by="ai:claude">to set it up.</span>
+> qmd is not configured for this project. Run `/avinyc:qmd-configure` to set it up.
 
-<span data-proof="authored" data-by="ai:claude">Then STOP.</span>
+Then STOP.
 
-<span data-proof="authored" data-by="ai:claude">Extract</span> <span data-proof="authored" data-by="ai:claude">`project`</span> <span data-proof="authored" data-by="ai:claude">name and</span> <span data-proof="authored" data-by="ai:claude">`collections`</span> <span data-proof="authored" data-by="ai:claude">— each has a name, path, and description. Pick the best collection for the query by matching against descriptions. If only one collection exists, use it.</span>
+Extract `project` name and `collections` — each has a name, path, and description. Pick the best collection for the query by matching against descriptions. If only one collection exists, use it.
 
-## <span data-proof="authored" data-by="ai:claude">Step 2: Search via MCP</span>
+## Step 2: Search via MCP
 
-<span data-proof="authored" data-by="ai:claude">Use the</span> <span data-proof="authored" data-by="ai:claude">`mcp__qmd__query`</span> <span data-proof="authored" data-by="ai:claude">tool with a structured query. This is the primary search method — it's faster than CLI (models stay warm between queries) and supports multi-type queries with intent disambiguation.</span>
+Use the `mcp__qmd__query` tool with a structured query. This is the primary search method — it's faster than CLI (models stay warm between queries) and supports multi-type queries with intent disambiguation.
 
-### <span data-proof="authored" data-by="ai:claude">Constructing the Query</span>
+### Constructing the Query
 
-<span data-proof="authored" data-by="ai:claude">Every search should include at least two query types for best recall. The first query gets</span> **<span data-proof="authored" data-by="ai:claude">2x weight</span>** <span data-proof="authored" data-by="ai:claude">in fusion scoring, so put your best guess first.</span>
+Every search should include at least two query types for best recall. The first query gets **2x weight** in fusion scoring, so put your best guess first.
 
-```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6MjA4LCJhdHRycyI6eyJieSI6ImFpOmNsYXVkZSJ9fV0=
+```json
 {
   "searches": [
     { "type": "lex", "query": "2-5 exact keywords, no filler" },
@@ -39,29 +39,29 @@ argument-hint: "<search query>"
 }
 ```
 
-### <span data-proof="authored" data-by="ai:claude">Query Types</span>
+### Query Types
 
-| <span data-proof="authored" data-by="ai:claude">Type</span>   | <span data-proof="authored" data-by="ai:claude">Method</span>           | <span data-proof="authored" data-by="ai:claude">When to use</span>                               | <span data-proof="authored" data-by="ai:claude">Writing tips</span>                                                                                                                                                                                         |
+| Type   | Method           | When to use                               | Writing tips                                                                                                                                                                                         |
 | ------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <span data-proof="authored" data-by="ai:claude">`lex`</span>  | <span data-proof="authored" data-by="ai:claude">BM25 keyword</span>     | <span data-proof="authored" data-by="ai:claude">You know the exact terms in the docs</span>      | <span data-proof="authored" data-by="ai:claude">2-5 terms. Exact phrases:</span> <span data-proof="authored" data-by="ai:claude">`"rate limiter"`. Exclude:</span> <span data-proof="authored" data-by="ai:claude">`-sports`. Code identifiers work.</span> |
-| <span data-proof="authored" data-by="ai:claude">`vec`</span>  | <span data-proof="authored" data-by="ai:claude">Vector semantic</span>  | <span data-proof="authored" data-by="ai:claude">You don't know the vocabulary</span>             | <span data-proof="authored" data-by="ai:claude">Full question. Be specific: "how does the auth system handle session expiry?"</span>                                                                                                                        |
-| <span data-proof="authored" data-by="ai:claude">`hyde`</span> | <span data-proof="authored" data-by="ai:claude">Hypothetical doc</span> | <span data-proof="authored" data-by="ai:claude">Complex topic, you can imagine the answer</span> | <span data-proof="authored" data-by="ai:claude">Write 50-100 words of what the answer looks like, using vocabulary you expect in the result.</span>                                                                                                         |
+| `lex`  | BM25 keyword     | You know the exact terms in the docs      | 2-5 terms. Exact phrases: `"rate limiter"`. Exclude: `-sports`. Code identifiers work. |
+| `vec`  | Vector semantic  | You don't know the vocabulary             | Full question. Be specific: "how does the auth system handle session expiry?"                                                                                                                        |
+| `hyde` | Hypothetical doc | Complex topic, you can imagine the answer | Write 50-100 words of what the answer looks like, using vocabulary you expect in the result.                                                                                                         |
 
-### <span data-proof="authored" data-by="ai:claude">When to Use What</span>
+### When to Use What
 
-| <span data-proof="authored" data-by="ai:claude">Situation</span>                                                                    | <span data-proof="authored" data-by="ai:claude">Query types to include</span>                                                                                                                                                                                                                             |
+| Situation                                                                    | Query types to include                                                                                                                                                                                                                             |
 | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <span data-proof="authored" data-by="ai:claude">Know exact terms</span>                                                             | <span data-proof="authored" data-by="ai:claude">`lex`</span> <span data-proof="authored" data-by="ai:claude">only</span>                                                                                                                                                                                  |
-| <span data-proof="authored" data-by="ai:claude">Don't know vocabulary</span>                                                        | <span data-proof="authored" data-by="ai:claude">`vec`</span> <span data-proof="authored" data-by="ai:claude">only</span>                                                                                                                                                                                  |
-| <span data-proof="authored" data-by="ai:claude">Best recall</span>                                                                  | <span data-proof="authored" data-by="ai:claude">`lex`</span> <span data-proof="authored" data-by="ai:claude">+</span> <span data-proof="authored" data-by="ai:claude">`vec`</span>                                                                                                                        |
-| <span data-proof="authored" data-by="ai:claude">Complex or broad topic</span>                                                       | <span data-proof="authored" data-by="ai:claude">`lex`</span> <span data-proof="authored" data-by="ai:claude">+</span> <span data-proof="authored" data-by="ai:claude">`vec`</span> <span data-proof="authored" data-by="ai:claude">+</span> <span data-proof="authored" data-by="ai:claude">`hyde`</span> |
-| <span data-proof="authored" data-by="ai:claude">Ambiguous query (e.g., "performance" could mean web perf, team health, etc.)</span> | <span data-proof="authored" data-by="ai:claude">Any combination +</span> <span data-proof="authored" data-by="ai:claude">`intent`</span>                                                                                                                                                                  |
+| Know exact terms                                                             | `lex` only                                                                                                                                                                                  |
+| Don't know vocabulary                                                        | `vec` only                                                                                                                                                                                  |
+| Best recall                                                                  | `lex` + `vec`                                                                                                                        |
+| Complex or broad topic                                                       | `lex` + `vec` + `hyde` |
+| Ambiguous query (e.g., "performance" could mean web perf, team health, etc.) | Any combination + `intent`                                                                                                                                                                  |
 
-### <span data-proof="authored" data-by="ai:claude">Intent Disambiguation</span>
+### Intent Disambiguation
 
-<span data-proof="authored" data-by="ai:claude">When a query term is ambiguous, add</span> <span data-proof="authored" data-by="ai:claude">`intent`</span> <span data-proof="authored" data-by="ai:claude">to steer all pipeline stages (expansion, reranking, snippet extraction):</span>
+When a query term is ambiguous, add `intent` to steer all pipeline stages (expansion, reranking, snippet extraction):
 
-```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6MjQwLCJhdHRycyI6eyJieSI6ImFpOmNsYXVkZSJ9fV0=
+```json
 {
   "searches": [
     { "type": "lex", "query": "performance" },
@@ -73,61 +73,61 @@ argument-hint: "<search query>"
 }
 ```
 
-<span data-proof="authored" data-by="ai:claude">Intent does not search on its own — it's a steering signal that disambiguates what you mean.</span>
+Intent does not search on its own — it's a steering signal that disambiguates what you mean.
 
-## <span data-proof="authored" data-by="ai:claude">Step 3: Interpret Results</span>
+## Step 3: Interpret Results
 
-<span data-proof="authored" data-by="ai:claude">Results include</span> <span data-proof="authored" data-by="ai:claude">`docid`,</span> <span data-proof="authored" data-by="ai:claude">`score`,</span> <span data-proof="authored" data-by="ai:claude">`file`,</span> <span data-proof="authored" data-by="ai:claude">`title`,</span> <span data-proof="authored" data-by="ai:claude">`context`, and</span> <span data-proof="authored" data-by="ai:claude">`snippet`.</span>
+Results include `docid`, `score`, `file`, `title`, `context`, and `snippet`.
 
-| <span data-proof="authored" data-by="ai:claude">Score</span>            | <span data-proof="authored" data-by="ai:claude">Meaning</span>                              |
+| Score            | Meaning                              |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| **<span data-proof="authored" data-by="ai:claude">0.7+</span>**         | <span data-proof="authored" data-by="ai:claude">Highly relevant — read this document</span> |
-| **<span data-proof="authored" data-by="ai:claude">0.5–0.7</span>**      | <span data-proof="authored" data-by="ai:claude">Worth reading if topic matches</span>       |
-| **<span data-proof="authored" data-by="ai:claude">< 0.5 on all</span>** | <span data-proof="authored" data-by="ai:claude">Try different query types or refine</span>  |
+| **0.7+**         | Highly relevant — read this document |
+| **0.5–0.7**      | Worth reading if topic matches       |
+| **< 0.5 on all** | Try different query types or refine  |
 
-## <span data-proof="authored" data-by="ai:claude">Step 4: Retrieve Documents</span>
+## Step 4: Retrieve Documents
 
-<span data-proof="authored" data-by="ai:claude">To read a full document from the results, use</span> <span data-proof="authored" data-by="ai:claude">`mcp__qmd__get`:</span>
+To read a full document from the results, use `mcp__qmd__get`:
 
-```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6MjAsImF0dHJzIjp7ImJ5IjoiYWk6Y2xhdWRlIn19XQ==
+```json
 { "path": "#docid" }
 ```
 
-<span data-proof="authored" data-by="ai:claude">Or by file path:</span>
+Or by file path:
 
-```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6NDUsImF0dHJzIjp7ImJ5IjoiYWk6Y2xhdWRlIn19XQ==
+```json
 { "path": "collection_name/path/to/file.md" }
 ```
 
-<span data-proof="authored" data-by="ai:claude">For multiple related documents, use</span> <span data-proof="authored" data-by="ai:claude">`mcp__qmd__multi_get`</span> <span data-proof="authored" data-by="ai:claude">to batch retrieve:</span>
+For multiple related documents, use `mcp__qmd__multi_get` to batch retrieve:
 
-```json proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6NDIsImF0dHJzIjp7ImJ5IjoiYWk6Y2xhdWRlIn19XQ==
+```json
 { "pattern": "collection_name/docs/*.md" }
 ```
 
-<span data-proof="authored" data-by="ai:claude">This is faster than reading files one at a time.</span>
+This is faster than reading files one at a time.
 
-## <span data-proof="authored" data-by="ai:claude">Error Handling</span>
+## Error Handling
 
-<span data-proof="authored" data-by="ai:claude">If MCP tools fail, diagnose the issue:</span>
+If MCP tools fail, diagnose the issue:
 
-| <span data-proof="authored" data-by="ai:claude">Error</span>                                                                                  | <span data-proof="authored" data-by="ai:claude">Likely cause</span>                  | <span data-proof="authored" data-by="ai:claude">Fix</span>                                                                                                                                                                                                                                                                                         |
+| Error                                                                                  | Likely cause                  | Fix                                                                                                                                                                                                                                                                                         |
 | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <span data-proof="authored" data-by="ai:claude">`mcp__qmd__query`</span> <span data-proof="authored" data-by="ai:claude">not available</span> | <span data-proof="authored" data-by="ai:claude">MCP server not configured</span>     | <span data-proof="authored" data-by="ai:claude">Add</span> <span data-proof="authored" data-by="ai:claude">`"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}`</span> <span data-proof="authored" data-by="ai:claude">to Claude Code settings. Run</span> <span data-proof="authored" data-by="ai:claude">`/avinyc:qmd-configure`.</span> |
-| <span data-proof="authored" data-by="ai:claude">MCP call returns error</span>                                                                 | <span data-proof="authored" data-by="ai:claude">Server not running or crashed</span> | <span data-proof="authored" data-by="ai:claude">Run</span> <span data-proof="authored" data-by="ai:claude">`qmd mcp`</span> <span data-proof="authored" data-by="ai:claude">to verify. Check</span> <span data-proof="authored" data-by="ai:claude">`qmd status`.</span>                                                                           |
-| <span data-proof="authored" data-by="ai:claude">Collection not found</span>                                                                   | <span data-proof="authored" data-by="ai:claude">Config out of sync</span>            | <span data-proof="authored" data-by="ai:claude">Run</span> <span data-proof="authored" data-by="ai:claude">`/avinyc:qmd-doctor`</span> <span data-proof="authored" data-by="ai:claude">to diagnose.</span>                                                                                                                                         |
-| <span data-proof="authored" data-by="ai:claude">No results</span>                                                                             | <span data-proof="authored" data-by="ai:claude">Index empty or stale</span>          | <span data-proof="authored" data-by="ai:claude">Run</span> <span data-proof="authored" data-by="ai:claude">`qmd update && qmd embed`</span> <span data-proof="authored" data-by="ai:claude">to rebuild.</span>                                                                                                                                     |
+| `mcp__qmd__query` not available | MCP server not configured     | Add `"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}` to Claude Code settings. Run `/avinyc:qmd-configure`. |
+| MCP call returns error                                                                 | Server not running or crashed | Run `qmd mcp` to verify. Check `qmd status`.                                                                           |
+| Collection not found                                                                   | Config out of sync            | Run `/avinyc:qmd-doctor` to diagnose.                                                                                                                                         |
+| No results                                                                             | Index empty or stale          | Run `qmd update && qmd embed` to rebuild.                                                                                                                                     |
 
-## <span data-proof="authored" data-by="ai:claude">CLI Fallback</span>
+## CLI Fallback
 
-<span data-proof="authored" data-by="ai:claude">If MCP tools are unavailable, fall back to the CLI. The</span> <span data-proof="authored" data-by="ai:claude">`qmd query`</span> <span data-proof="authored" data-by="ai:claude">command supports structured queries via multiline strings:</span>
+If MCP tools are unavailable, fall back to the CLI. The `qmd query` command supports structured queries via multiline strings:
 
-```bash proof:W3sidHlwZSI6InByb29mQXV0aG9yZWQiLCJmcm9tIjowLCJ0byI6MTAzLCJhdHRycyI6eyJieSI6ImFpOmNsYXVkZSJ9fV0=
+```bash
 qmd query $'lex: exact keywords here\nvec: natural language question here' -c <collection> --json -n 10
 ```
 
-<span data-proof="authored" data-by="ai:claude">This single command subsumes</span> <span data-proof="authored" data-by="ai:claude">`qmd search`</span> <span data-proof="authored" data-by="ai:claude">(BM25 only) and</span> <span data-proof="authored" data-by="ai:claude">`qmd vsearch`</span> <span data-proof="authored" data-by="ai:claude">(vector only). Always use</span> <span data-proof="authored" data-by="ai:claude">`--json`</span> <span data-proof="authored" data-by="ai:claude">for parseable output.</span>
+This single command subsumes `qmd search` (BM25 only) and `qmd vsearch` (vector only). Always use `--json` for parseable output.
 
-## <span data-proof="authored" data-by="ai:claude">Fallback to Glob/Grep</span>
+## Fallback to Glob/Grep
 
-<span data-proof="authored" data-by="ai:claude">After 2 poor query attempts (different query types, refined terms), fall back to Glob/Grep on the collection's directory path from config. qmd can't find everything — sometimes a direct file search is faster.</span>
+After 2 poor query attempts (different query types, refined terms), fall back to Glob/Grep on the collection's directory path from config. qmd can't find everything — sometimes a direct file search is faster.

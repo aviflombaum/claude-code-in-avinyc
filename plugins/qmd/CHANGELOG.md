@@ -1,115 +1,115 @@
-# <span data-proof="authored" data-by="ai:claude">Changelog</span>
+# Changelog
 
-## <span data-proof="authored" data-by="ai:claude">2.0.0</span>
+## 2.0.0
 
-### <span data-proof="authored" data-by="ai:claude">Breaking Changes</span>
+### Breaking Changes
 
-* <span data-proof="authored" data-by="ai:claude">Search skill no longer forks a Haiku subagent — runs inline in the main thread</span>
+* Search skill no longer forks a Haiku subagent — runs inline in the main thread
 
-* <span data-proof="authored" data-by="ai:claude">Search uses qmd MCP tools (`mcp__qmd__query`,</span> <span data-proof="authored" data-by="ai:claude">`mcp__qmd__get`,</span> <span data-proof="authored" data-by="ai:claude">`mcp__qmd__multi_get`) instead of CLI commands</span>
+* Search uses qmd MCP tools (`mcp__qmd__query`, `mcp__qmd__get`, `mcp__qmd__multi_get`) instead of CLI commands
 
-* <span data-proof="authored" data-by="ai:claude">Guard hooks removed entirely — no more directory interception</span>
+* Guard hooks removed entirely — no more directory interception
 
-* <span data-proof="authored" data-by="ai:claude">All skills now</span> <span data-proof="authored" data-by="ai:claude">`disable-model-invocation: true`</span> <span data-proof="authored" data-by="ai:claude">(user-invocable only)</span>
+* All skills now `disable-model-invocation: true` (user-invocable only)
 
-* <span data-proof="authored" data-by="ai:claude">`.claude/qmd.json`</span> <span data-proof="authored" data-by="ai:claude">schema simplified: removed</span> <span data-proof="authored" data-by="ai:claude">`guardedDirs`</span> <span data-proof="authored" data-by="ai:claude">and</span> <span data-proof="authored" data-by="ai:claude">`guard`</span> <span data-proof="authored" data-by="ai:claude">fields</span>
+* `.claude/qmd.json` schema simplified: removed `guardedDirs` and `guard` fields
 
-* <span data-proof="authored" data-by="ai:claude">Deleted scripts:</span> <span data-proof="authored" data-by="ai:claude">`qmd-search.sh`,</span> <span data-proof="authored" data-by="ai:claude">`qmd-vsearch.sh`,</span> <span data-proof="authored" data-by="ai:claude">`qmd-status.sh`</span>
+* Deleted scripts: `qmd-search.sh`, `qmd-vsearch.sh`, `qmd-status.sh`
 
-* <span data-proof="authored" data-by="ai:claude">Deleted hooks:</span> <span data-proof="authored" data-by="ai:claude">`hooks.json`,</span> <span data-proof="authored" data-by="ai:claude">`guard-qmd-search.sh`</span>
+* Deleted hooks: `hooks.json`, `guard-qmd-search.sh`
 
-### <span data-proof="authored" data-by="ai:claude">Added</span>
+### Added
 
-* <span data-proof="authored" data-by="ai:claude">Structured query support via MCP: lex + vec + hyde query types with intent disambiguation</span>
+* Structured query support via MCP: lex + vec + hyde query types with intent disambiguation
 
-* <span data-proof="authored" data-by="ai:claude">`mcp__qmd__multi_get`</span> <span data-proof="authored" data-by="ai:claude">for batch document retrieval</span>
+* `mcp__qmd__multi_get` for batch document retrieval
 
-* <span data-proof="authored" data-by="ai:claude">MCP server configuration check in</span> <span data-proof="authored" data-by="ai:claude">`/avinyc:qmd-configure`</span>
+* MCP server configuration check in `/avinyc:qmd-configure`
 
-* <span data-proof="authored" data-by="ai:claude">MCP connectivity check in</span> <span data-proof="authored" data-by="ai:claude">`/avinyc:qmd-doctor`</span>
+* MCP connectivity check in `/avinyc:qmd-doctor`
 
-* <span data-proof="authored" data-by="ai:claude">CLI fallback when MCP is unavailable (`qmd query`</span> <span data-proof="authored" data-by="ai:claude">with structured multiline format)</span>
+* CLI fallback when MCP is unavailable (`qmd query` with structured multiline format)
 
-* <span data-proof="authored" data-by="ai:claude">Error handling with specific fix instructions for each failure mode</span>
+* Error handling with specific fix instructions for each failure mode
 
-### <span data-proof="authored" data-by="ai:claude">Changed</span>
+### Changed
 
-* <span data-proof="authored" data-by="ai:claude">Search queries now constructed as structured JSON (multi-type with fusion weighting) instead of single CLI strings</span>
+* Search queries now constructed as structured JSON (multi-type with fusion weighting) instead of single CLI strings
 
-* <span data-proof="authored" data-by="ai:claude">Full model intelligence (Opus/Sonnet) applied to query construction instead of Haiku</span>
+* Full model intelligence (Opus/Sonnet) applied to query construction instead of Haiku
 
-* <span data-proof="authored" data-by="ai:claude">Status skill uses</span> <span data-proof="authored" data-by="ai:claude">`mcp__qmd__status`</span> <span data-proof="authored" data-by="ai:claude">with CLI fallback</span>
+* Status skill uses `mcp__qmd__status` with CLI fallback
 
-* <span data-proof="authored" data-by="ai:claude">Doctor skill adds MCP health check, removes guard-related checks</span>
+* Doctor skill adds MCP health check, removes guard-related checks
 
-* <span data-proof="authored" data-by="ai:claude">Configure skill adds MCP server verification step</span>
+* Configure skill adds MCP server verification step
 
-### <span data-proof="authored" data-by="ai:claude">Why</span>
+### Why
 
-<span data-proof="authored" data-by="ai:claude">The main model (Opus/Sonnet) constructs significantly better structured queries than Haiku did with CLI strings. MCP keeps qmd's GGUF models warm between queries, eliminating ~3GB cold-start per invocation. Structured queries (lex+vec+hyde with intent) were impossible with the old CLI-per-command approach.</span>
+The main model (Opus/Sonnet) constructs significantly better structured queries than Haiku did with CLI strings. MCP keeps qmd's GGUF models warm between queries, eliminating ~3GB cold-start per invocation. Structured queries (lex+vec+hyde with intent) were impossible with the old CLI-per-command approach.
 
-## <span data-proof="authored" data-by="ai:claude">1.3.0</span>
+## 1.3.0
 
-### <span data-proof="authored" data-by="ai:claude">Added</span>
+### Added
 
-* <span data-proof="authored" data-by="ai:claude">`guard-qmd-bash.sh`</span> <span data-proof="authored" data-by="ai:claude">— PreToolUse hook on Bash that blocks direct</span> <span data-proof="authored" data-by="ai:claude">`qmd`</span> <span data-proof="authored" data-by="ai:claude">CLI commands, enforcing wrapper script usage</span>
+* `guard-qmd-bash.sh` — PreToolUse hook on Bash that blocks direct `qmd` CLI commands, enforcing wrapper script usage
 
-* <span data-proof="authored" data-by="ai:claude">Hook self-discovers plugin root via</span> <span data-proof="authored" data-by="ai:claude">`BASH_SOURCE`</span> <span data-proof="authored" data-by="ai:claude">and provides actual resolved script paths in block messages</span>
+* Hook self-discovers plugin root via `BASH_SOURCE` and provides actual resolved script paths in block messages
 
-* <span data-proof="authored" data-by="ai:claude">Hard enforcement: LLM cannot bypass wrapper scripts even if it ignores SKILL.md instructions</span>
+* Hard enforcement: LLM cannot bypass wrapper scripts even if it ignores SKILL.md instructions
 
-### <span data-proof="authored" data-by="ai:claude">Changed</span>
+### Changed
 
-* <span data-proof="authored" data-by="ai:claude">Tightened Doctor Mode and Status Mode instructions — explicit "run this ONE command, nothing else"</span>
+* Tightened Doctor Mode and Status Mode instructions — explicit "run this ONE command, nothing else"
 
-* <span data-proof="authored" data-by="ai:claude">STRICT RULES section now references hook enforcement</span>
+* STRICT RULES section now references hook enforcement
 
-* <span data-proof="authored" data-by="ai:claude">Hook allows diagnostic commands (`qmd --version`,</span> <span data-proof="authored" data-by="ai:claude">`qmd --help`,</span> <span data-proof="authored" data-by="ai:claude">`which qmd`,</span> <span data-proof="authored" data-by="ai:claude">`command -v qmd`)</span>
+* Hook allows diagnostic commands (`qmd --version`, `qmd --help`, `which qmd`, `command -v qmd`)
 
-* <span data-proof="authored" data-by="ai:claude">README reorganized hooks into dedicated section (Bash Guard, Directory Guard, Git Hook)</span>
+* README reorganized hooks into dedicated section (Bash Guard, Directory Guard, Git Hook)
 
-## <span data-proof="authored" data-by="ai:claude">1.2.0</span>
+## 1.2.0
 
-### <span data-proof="authored" data-by="ai:claude">Changed</span>
+### Changed
 
-* <span data-proof="authored" data-by="ai:claude">Split overloaded</span> <span data-proof="authored" data-by="ai:claude">`/qmd:search`</span> <span data-proof="authored" data-by="ai:claude">into explicit commands:</span> <span data-proof="authored" data-by="ai:claude">`/qmd:configure`,</span> <span data-proof="authored" data-by="ai:claude">`/qmd:status`,</span> <span data-proof="authored" data-by="ai:claude">`/qmd:doctor`</span>
+* Split overloaded `/qmd:search` into explicit commands: `/qmd:configure`, `/qmd:status`, `/qmd:doctor`
 
-* <span data-proof="authored" data-by="ai:claude">`/qmd:search`</span> <span data-proof="authored" data-by="ai:claude">is now search-only — directs to</span> <span data-proof="authored" data-by="ai:claude">`/qmd:configure`</span> <span data-proof="authored" data-by="ai:claude">if not set up</span>
+* `/qmd:search` is now search-only — directs to `/qmd:configure` if not set up
 
-* <span data-proof="authored" data-by="ai:claude">Setup and reconfigure collapsed into single idempotent</span> <span data-proof="authored" data-by="ai:claude">`/qmd:configure`</span> <span data-proof="authored" data-by="ai:claude">command</span>
+* Setup and reconfigure collapsed into single idempotent `/qmd:configure` command
 
-* <span data-proof="authored" data-by="ai:claude">Updated doctor script remediation messages to reference new commands</span>
+* Updated doctor script remediation messages to reference new commands
 
-## <span data-proof="authored" data-by="ai:claude">1.1.0</span>
+## 1.1.0
 
-### <span data-proof="authored" data-by="ai:claude">Breaking Changes</span>
+### Breaking Changes
 
-* <span data-proof="authored" data-by="ai:claude">Dropped</span> <span data-proof="authored" data-by="ai:claude">`--index <name>`</span> <span data-proof="authored" data-by="ai:claude">— all operations use the default qmd index</span>
+* Dropped `--index <name>` — all operations use the default qmd index
 
-* <span data-proof="authored" data-by="ai:claude">`.claude/qmd.json`</span> <span data-proof="authored" data-by="ai:claude">field renamed:</span> <span data-proof="authored" data-by="ai:claude">`"index"`</span> <span data-proof="authored" data-by="ai:claude">→</span> <span data-proof="authored" data-by="ai:claude">`"project"`</span>
+* `.claude/qmd.json` field renamed: `"index"` → `"project"`
 
-* <span data-proof="authored" data-by="ai:claude">`install-git-hook.sh`</span> <span data-proof="authored" data-by="ai:claude">arg is now project name (for marker only), not index name</span>
+* `install-git-hook.sh` arg is now project name (for marker only), not index name
 
-### <span data-proof="authored" data-by="ai:claude">Added</span>
+### Added
 
-* <span data-proof="authored" data-by="ai:claude">Bash wrapper scripts for all qmd operations</span>
+* Bash wrapper scripts for all qmd operations
 
-* <span data-proof="authored" data-by="ai:claude">Doctor mode health checks</span>
+* Doctor mode health checks
 
-* <span data-proof="authored" data-by="ai:claude">`qmd-derive-name.sh`</span> <span data-proof="authored" data-by="ai:claude">— deterministic project name derivation</span>
+* `qmd-derive-name.sh` — deterministic project name derivation
 
-### <span data-proof="authored" data-by="ai:claude">Changed</span>
+### Changed
 
-* <span data-proof="authored" data-by="ai:claude">All qmd operations go through bash wrapper scripts (never called directly)</span>
+* All qmd operations go through bash wrapper scripts (never called directly)
 
-* <span data-proof="authored" data-by="ai:claude">Setup uses</span> <span data-proof="authored" data-by="ai:claude">`qmd collection add`</span> <span data-proof="authored" data-by="ai:claude">CLI instead of writing YAML manually</span>
+* Setup uses `qmd collection add` CLI instead of writing YAML manually
 
-## <span data-proof="authored" data-by="ai:claude">1.0.0</span>
+## 1.0.0
 
-* <span data-proof="authored" data-by="ai:claude">Initial release in claude-code-in-avinyc marketplace</span>
+* Initial release in claude-code-in-avinyc marketplace
 
-* <span data-proof="authored" data-by="ai:claude">Per-project setup interview for qmd configuration</span>
+* Per-project setup interview for qmd configuration
 
-* <span data-proof="authored" data-by="ai:claude">Smart search across collections</span>
+* Smart search across collections
 
-* <span data-proof="authored" data-by="ai:claude">Guard hooks for qmd-first workflow</span>
+* Guard hooks for qmd-first workflow
