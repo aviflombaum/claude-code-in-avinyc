@@ -13,17 +13,17 @@ Run a comprehensive health check on the qmd configuration for this project. Perf
 
 For any failure, suggest the appropriate fix:
 
-| Failure                        | Fix                                                                                                                                                                                        |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| qmd binary not found           | `npm install -g @tobilu/qmd`                                                                                                                                                               |
-| .claude/qmd.json missing       | Run `/avinyc:qmd-configure`                                                                                                         |
-| Missing project field          | Run `/avinyc:qmd-configure`                                                                                                         |
-| Collection not in qmd index    | Run `/avinyc:qmd-configure`                                                                                                         |
-| Collection naming mismatch     | Run `/avinyc:qmd-configure` to rename                                        |
-| Git hook missing/wrong marker  | Run `/avinyc:qmd-configure` and re-enable git hook                           |
-| Git hook has old --index flag  | Run `/avinyc:qmd-configure` and re-enable git hook                           |
-| MCP server not responding      | Add `"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}` to settings |
-| YAML config missing collection | Run `/avinyc:qmd-configure`                                                                                                         |
+| Failure | Fix |
+|---------|-----|
+| qmd binary not found | `npm install -g @tobilu/qmd` |
+| .claude/qmd.json missing | Run `/avinyc:qmd-configure` |
+| Missing project field | Run `/avinyc:qmd-configure` |
+| Collection not in qmd index | Run `/avinyc:qmd-configure` |
+| Collection naming mismatch | Run `/avinyc:qmd-configure` to rename |
+| Git hook missing/wrong marker | Run `/avinyc:qmd-configure` and re-enable git hook |
+| Git hook has old --index flag | Run `/avinyc:qmd-configure` and re-enable git hook |
+| MCP server not responding | Add `"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}` to settings |
+| YAML config missing collection | Run `/avinyc:qmd-configure` |
 
 ## Checks
 

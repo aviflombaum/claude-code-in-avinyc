@@ -16,12 +16,9 @@ Read `.claude/qmd.json`. If missing, tell the user:
 > qmd is not configured for this project. Run `/avinyc:qmd-configure` to set it up.
 
 Print a summary:
-
-* Project name
-
-* Collections (name, path, description for each)
-
-* Git hook: installed/not installed
+- Project name
+- Collections (name, path, description for each)
+- Git hook: installed/not installed
 
 ## Step 2: Get live index status
 
@@ -32,14 +29,10 @@ qmd status
 ```
 
 Display the live status alongside the project config. Key things to highlight:
-
-* Total documents indexed per collection
-
-* Embedding status (how many chunks have vectors)
-
-* Any collections in config that are missing from the index
-
-* Model info (which embedding/reranker models are loaded)
+- Total documents indexed per collection
+- Embedding status (how many chunks have vectors)
+- Any collections in config that are missing from the index
+- Model info (which embedding/reranker models are loaded)
 
 ## Step 3: MCP connectivity
 

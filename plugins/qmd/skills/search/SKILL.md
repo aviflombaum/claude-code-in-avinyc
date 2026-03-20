@@ -41,21 +41,21 @@ Every search should include at least two query types for best recall. The first 
 
 ### Query Types
 
-| Type   | Method           | When to use                               | Writing tips                                                                                                                                                                                         |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `lex`  | BM25 keyword     | You know the exact terms in the docs      | 2-5 terms. Exact phrases: `"rate limiter"`. Exclude: `-sports`. Code identifiers work. |
-| `vec`  | Vector semantic  | You don't know the vocabulary             | Full question. Be specific: "how does the auth system handle session expiry?"                                                                                                                        |
-| `hyde` | Hypothetical doc | Complex topic, you can imagine the answer | Write 50-100 words of what the answer looks like, using vocabulary you expect in the result.                                                                                                         |
+| Type | Method | When to use | Writing tips |
+|------|--------|-------------|--------------|
+| `lex` | BM25 keyword | You know the exact terms in the docs | 2-5 terms. Exact phrases: `"rate limiter"`. Exclude: `-sports`. Code identifiers work. |
+| `vec` | Vector semantic | You don't know the vocabulary | Full question. Be specific: "how does the auth system handle session expiry?" |
+| `hyde` | Hypothetical doc | Complex topic, you can imagine the answer | Write 50-100 words of what the answer looks like, using vocabulary you expect in the result. |
 
 ### When to Use What
 
-| Situation                                                                    | Query types to include                                                                                                                                                                                                                             |
-| ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Know exact terms                                                             | `lex` only                                                                                                                                                                                  |
-| Don't know vocabulary                                                        | `vec` only                                                                                                                                                                                  |
-| Best recall                                                                  | `lex` + `vec`                                                                                                                        |
-| Complex or broad topic                                                       | `lex` + `vec` + `hyde` |
-| Ambiguous query (e.g., "performance" could mean web perf, team health, etc.) | Any combination + `intent`                                                                                                                                                                  |
+| Situation | Query types to include |
+|-----------|----------------------|
+| Know exact terms | `lex` only |
+| Don't know vocabulary | `vec` only |
+| Best recall | `lex` + `vec` |
+| Complex or broad topic | `lex` + `vec` + `hyde` |
+| Ambiguous query (e.g., "performance" could mean web perf, team health, etc.) | Any combination + `intent` |
 
 ### Intent Disambiguation
 
@@ -79,11 +79,11 @@ Intent does not search on its own — it's a steering signal that disambiguates 
 
 Results include `docid`, `score`, `file`, `title`, `context`, and `snippet`.
 
-| Score            | Meaning                              |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| **0.7+**         | Highly relevant — read this document |
-| **0.5–0.7**      | Worth reading if topic matches       |
-| **< 0.5 on all** | Try different query types or refine  |
+| Score | Meaning |
+|-------|---------|
+| **0.7+** | Highly relevant — read this document |
+| **0.5–0.7** | Worth reading if topic matches |
+| **< 0.5 on all** | Try different query types or refine |
 
 ## Step 4: Retrieve Documents
 
@@ -111,12 +111,12 @@ This is faster than reading files one at a time.
 
 If MCP tools fail, diagnose the issue:
 
-| Error                                                                                  | Likely cause                  | Fix                                                                                                                                                                                                                                                                                         |
-| --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mcp__qmd__query` not available | MCP server not configured     | Add `"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}` to Claude Code settings. Run `/avinyc:qmd-configure`. |
-| MCP call returns error                                                                 | Server not running or crashed | Run `qmd mcp` to verify. Check `qmd status`.                                                                           |
-| Collection not found                                                                   | Config out of sync            | Run `/avinyc:qmd-doctor` to diagnose.                                                                                                                                         |
-| No results                                                                             | Index empty or stale          | Run `qmd update && qmd embed` to rebuild.                                                                                                                                     |
+| Error | Likely cause | Fix |
+|-------|-------------|-----|
+| `mcp__qmd__query` not available | MCP server not configured | Add `"mcpServers": {"qmd": {"command": "qmd", "args": ["mcp"]}}` to Claude Code settings. Run `/avinyc:qmd-configure`. |
+| MCP call returns error | Server not running or crashed | Run `qmd mcp` to verify. Check `qmd status`. |
+| Collection not found | Config out of sync | Run `/avinyc:qmd-doctor` to diagnose. |
+| No results | Index empty or stale | Run `qmd update && qmd embed` to rebuild. |
 
 ## CLI Fallback
 

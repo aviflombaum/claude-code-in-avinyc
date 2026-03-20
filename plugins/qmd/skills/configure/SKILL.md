@@ -79,10 +79,8 @@ If no candidate directories were found, ask the user to type custom directory pa
 ## Step 6: Get collection details
 
 For each selected directory, use `AskUserQuestion` to:
-
-* Ask for a short description of what the directory contains (e.g., "Project architecture and feature docs")
-
-* Confirm the file pattern (default: `**/*.md`, offer alternatives like `**/*.{md,txt}`)
+- Ask for a short description of what the directory contains (e.g., "Project architecture and feature docs")
+- Confirm the file pattern (default: `**/*.md`, offer alternatives like `**/*.{md,txt}`)
 
 ## Step 7: Add collections
 
@@ -159,19 +157,11 @@ Check for the marker comment `# qmd-auto-index:<project_name>` first to avoid du
 ## Step 11: Print summary
 
 Show the user:
-
-* Project name
-
-* Collections created (name, path, description)
-
-* MCP server: configured/not configured
-
-* Git hook: installed/not installed
-
-* How to search: `/avinyc:qmd-search <query>`
-
-* How to reconfigure: `/avinyc:qmd-configure`
-
-* How to check status: `/avinyc:qmd-status`
-
-* How to diagnose issues: `/avinyc:qmd-doctor`
+- Project name
+- Collections created (name, path, description)
+- MCP server: configured/not configured
+- Git hook: installed/not installed
+- How to search: `/avinyc:qmd-search <query>`
+- How to reconfigure: `/avinyc:qmd-configure`
+- How to check status: `/avinyc:qmd-status`
+- How to diagnose issues: `/avinyc:qmd-doctor`

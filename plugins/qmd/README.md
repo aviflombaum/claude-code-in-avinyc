@@ -4,9 +4,8 @@ Semantic search for any project's documentation using qmd's MCP tools. Interview
 
 ## Prerequisites
 
-* [qmd](https://github.com/tobi/qmd) 2.0+ installed (`npm install -g @tobilu/qmd`)
-
-* qmd MCP server configured in Claude Code settings (recommended for best performance)
+- [qmd](https://github.com/tobi/qmd) 2.0+ installed (`npm install -g @tobilu/qmd`)
+- qmd MCP server configured in Claude Code settings (recommended for best performance)
 
 ## Installation
 
@@ -14,14 +13,14 @@ Enable `qmd@claude-code-in-avinyc` in your Claude Code settings.
 
 ## Skills
 
-| Skill     | Invocation                   | Purpose                                    |
-| ---------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| search    | `/avinyc:qmd-search <query>` | Search indexed collections via MCP         |
-| configure | `/avinyc:qmd-configure`      | Set up or reconfigure qmd for this project |
-| status    | `/avinyc:qmd-status`         | Show project config and index status       |
-| doctor    | `/avinyc:qmd-doctor`         | Run health check                           |
+| Skill | Invocation | Purpose |
+|-------|-----------|---------|
+| search | `/avinyc:qmd-search <query>` | Search indexed collections via MCP |
+| configure | `/avinyc:qmd-configure` | Set up or reconfigure qmd for this project |
+| status | `/avinyc:qmd-status` | Show project config and index status |
+| doctor | `/avinyc:qmd-doctor` | Run health check |
 
-All skills are user-invocable only (not auto-triggered).
+All skills are both user-invocable and model-invocable.
 
 ### Configure (first run)
 
@@ -30,7 +29,6 @@ All skills are user-invocable only (not auto-triggered).
 ```
 
 Interactive interview that:
-
 1. Checks qmd is installed and MCP server is configured
 2. Derives project name from git folder (user can override)
 3. Detects indexable directories (`docs/`, `plans/`, `tasks/`, etc.)
@@ -108,11 +106,11 @@ When enabled via `/avinyc:qmd-configure`, auto-runs `qmd update && qmd embed` in
 
 Utility scripts in `scripts/` used by configure and doctor:
 
-| Script                     | Purpose                                                                                                                                                |
-| --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `install-git-hook.sh`      | Git post-commit hook installer                                                                                                                         |
-| `qmd-add-collection.sh`    | `qmd collection add` + `qmd context add` |
-| `qmd-remove-collection.sh` | `qmd collection remove`                                                                                                                                |
-| `qmd-list-collections.sh`  | `qmd collection list`                                                                                                                                  |
-| `qmd-index.sh`             | `qmd update` + `qmd embed`               |
-| `qmd-derive-name.sh`       | Project name from git folder                                                                                                                           |
+| Script | Purpose |
+|--------|---------|
+| `install-git-hook.sh` | Git post-commit hook installer |
+| `qmd-add-collection.sh` | `qmd collection add` + `qmd context add` |
+| `qmd-remove-collection.sh` | `qmd collection remove` |
+| `qmd-list-collections.sh` | `qmd collection list` |
+| `qmd-index.sh` | `qmd update` + `qmd embed` |
+| `qmd-derive-name.sh` | Project name from git folder |
