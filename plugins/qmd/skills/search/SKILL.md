@@ -90,13 +90,13 @@ Results include `docid`, `score`, `file`, `title`, `context`, and `snippet`.
 To read a full document from the results, use `mcp__qmd__get`:
 
 ```json
-{ "path": "#docid" }
+{ "file": "#docid" }
 ```
 
 Or by file path:
 
 ```json
-{ "path": "collection_name/path/to/file.md" }
+{ "file": "collection_name/path/to/file.md" }
 ```
 
 For multiple related documents, use `mcp__qmd__multi_get` to batch retrieve:
